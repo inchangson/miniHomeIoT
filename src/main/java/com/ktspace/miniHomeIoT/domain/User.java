@@ -1,13 +1,17 @@
 package com.ktspace.miniHomeIoT.domain;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class User {
     private String id;
     private String name;
     private String address;
-    private String phoneNums;
+    private String phoneNum;
     private LocalDateTime createDate;
+
+    private List<Device> devices;
+    private List<Service> services;
 
     //region getter and setter
     public String getSeq() {
@@ -42,13 +46,12 @@ public class User {
         this.address = address;
     }
 
-    public String getPhoneNums() {
-        return phoneNums;
+    public String getPhoneNum() {
+        return phoneNum;
     }
 
-    public void setPhoneNums(String phoneNums) {
-        this.phoneNums = phoneNums;
+    public void setPhoneNum(String phoneNum) {
+        this.phoneNum = phoneNum;
     }
     //endregion
-
 }
