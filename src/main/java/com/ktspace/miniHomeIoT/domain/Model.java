@@ -2,7 +2,7 @@ package com.ktspace.miniHomeIoT.domain;
 
 public class Model {
     private String id;
-    private String name;
+    private String korName;
     private String typeCode;
     private Company company;
 
@@ -15,12 +15,12 @@ public class Model {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getKorName() {
+        return korName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setKorName(String korName) {
+        this.korName = korName;
     }
 
     public String getTypeCode() {
