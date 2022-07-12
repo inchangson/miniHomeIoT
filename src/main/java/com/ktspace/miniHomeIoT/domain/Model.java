@@ -1,10 +1,14 @@
 package com.ktspace.miniHomeIoT.domain;
 
+import java.util.Optional;
+
 public class Model {
     private String id;
     private String korName;
     private String typeCode;
     private Company company;
+
+    private Optional<Resource> resources;
 
     //region getter and setter
     public String getId() {
