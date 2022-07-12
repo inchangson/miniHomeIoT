@@ -1,24 +1,18 @@
 package com.ktspace.miniHomeIoT.domain;
 
-public class Company {
+public enum Company {
+    GOQUAL("GOQUAL", "HOME_IOT_GOQUAL"),
+    BRUNT("BRUNT", "HOME_IOT_BRUNT"),
+    SAMSUNG("SAMSUNG", "HOME_IOT_SS_V2"),
+    COWAY("COWAY", "HOME_IOT_COWAY"),
+    RINNAI("RINNAI", "HOME_IOT_RINNAI"),
+    ;
+
     private String id;
     private String external;
 
-    //region getter and setter
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
+    Company(String id, String external) {
         this.id = id;
-    }
-
-    public String getExternal() {
-        return external;
-    }
-
-    public void setExternal(String external) {
         this.external = external;
     }
-    //endregion
 }
