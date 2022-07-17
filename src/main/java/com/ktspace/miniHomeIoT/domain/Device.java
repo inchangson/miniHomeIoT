@@ -1,6 +1,6 @@
 package com.ktspace.miniHomeIoT.domain;
 
-import java.util.Optional;
+import java.util.List;
 
 public class Device {
 
@@ -14,10 +14,70 @@ public class Device {
 
     private Company company;
 
-    // 상속 이용해서 모델을 받은 디바이스가 리소스를 쓸 수 있게 하는 게 낫나?
-    private Optional<Resource> resources;
+    private List<Resource> resources;
 
-    // DB 접근에 대한 Abstract function 을 만들까?
-    //...
+    public Device(Integer seq, String name, String modelId, String modelNameKor, String modelTypeCode, Company company) {
+        this.seq = seq;
+        this.name = name;
+        this.modelId = modelId;
+        this.modelNameKor = modelNameKor;
+        this.modelTypeCode = modelTypeCode;
+        this.company = company;
+    }
 
+    public Integer getSeq() {
+        return seq;
+    }
+
+    public void setSeq(Integer seq) {
+        this.seq = seq;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getModelId() {
+        return modelId;
+    }
+
+    public void setModelId(String modelId) {
+        this.modelId = modelId;
+    }
+
+    public String getModelNameKor() {
+        return modelNameKor;
+    }
+
+    public void setModelNameKor(String modelNameKor) {
+        this.modelNameKor = modelNameKor;
+    }
+
+    public String getModelTypeCode() {
+        return modelTypeCode;
+    }
+
+    public void setModelTypeCode(String modelTypeCode) {
+        this.modelTypeCode = modelTypeCode;
+    }
+
+    public Company getCompany() {
+        return company;
+    }
+
+    public void setCompany(Company company) {
+        this.company = company;
+    }
+
+    public List<Resource> getResources() {
+        return resources;
+    }
+
+    public void setResources(List<Resource> resources) {
+        this.resources = resources;
+    }
 }
