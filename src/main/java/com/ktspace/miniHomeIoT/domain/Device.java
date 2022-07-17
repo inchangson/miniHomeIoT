@@ -25,6 +25,7 @@ public class Device {
         this.company = company;
     }
 
+    //region getter and setter
     public Integer getSeq() {
         return seq;
     }
@@ -80,4 +81,5 @@ public class Device {
     public void setResources(List<Resource> resources) {
         this.resources = resources;
     }
+    //endregion
 }
