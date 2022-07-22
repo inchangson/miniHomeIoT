@@ -12,22 +12,19 @@ import java.util.Optional;
 
 @Service
 public class HomeIoTService {
-
-        private final HomeIoTRepository homeIoTRepository = new MyBatisHomeIoTRepository();
+    private final HomeIoTRepository homeIoTRepository = new MyBatisHomeIoTRepository();
 
 //    public HomeIoTService(HomeIoTRepository homeIoTRepository) {
 //        this.homeIoTRepository = homeIoTRepository;
 //    }
 
-        public List<Device> getUserDevices(String userId) {
+    public List<Device> getUserDevices(String userId) {
             return homeIoTRepository.findAllDevices(userId);
-        }
-
-
-        public Optional<Device> readDeviceInfo(int devSeq){
-        return homeIoTRepository.findByDeviceSeq(devSeq);
     }
 
+    public Optional<Device> readDeviceInfo(int devSeq){
+        return homeIoTRepository.findByDeviceSeq(devSeq);
+    }
 
     public String controlResource(int devSeq, String rscGrpName, String value){
         Resource resource = new Resource(ResourceGroup.findByName(rscGrpName), value);
@@ -43,7 +40,7 @@ public class HomeIoTService {
 
 
     public void deleteDevice(int devSeq){
-
+        homeIoTRepository.removeDevice(devSeq);
     }
 
 
