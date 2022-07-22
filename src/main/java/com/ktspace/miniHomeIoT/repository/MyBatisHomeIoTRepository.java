@@ -1,9 +1,6 @@
 package com.ktspace.miniHomeIoT.repository;
 
-import com.ktspace.miniHomeIoT.domain.Device;
-import com.ktspace.miniHomeIoT.domain.Resource;
-import com.ktspace.miniHomeIoT.domain.Service;
-import com.ktspace.miniHomeIoT.domain.User;
+import com.ktspace.miniHomeIoT.domain.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -35,7 +32,7 @@ public class MyBatisHomeIoTRepository implements HomeIoTRepository{
     }
 
     @Override
-    public void removeDevice(Device device) {
+    public void removeDevice(Integer deviceSeq) {
 
     }
 
@@ -45,7 +42,7 @@ public class MyBatisHomeIoTRepository implements HomeIoTRepository{
     }
 
     @Override
-    public Optional<Device> findByService(Integer serviceSeq) {
+    public Optional<Device> findByDeviceSeq(Integer serviceSeq) {
         return Optional.empty();
     }
 
@@ -56,6 +53,11 @@ public class MyBatisHomeIoTRepository implements HomeIoTRepository{
 
     @Override
     public Resource saveResource(Resource resource, Integer deviceSeq) {
+        return null;
+    }
+
+    @Override
+    public Resource getResource(ResourceGroup resourceGroup, Integer deviceSeq) {
         return null;
     }
 }
