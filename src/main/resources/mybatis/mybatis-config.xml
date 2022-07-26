@@ -3,5 +3,6 @@
 <configuration>
     <mappers>
         <mapper resource="HomeIoTMapper.xml"/>
+        <mapper resource="DeviceMapper.xml"/>
     </mappers>
 </configuration>

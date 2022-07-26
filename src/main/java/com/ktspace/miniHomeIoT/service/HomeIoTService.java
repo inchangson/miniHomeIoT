@@ -21,7 +21,6 @@ public class HomeIoTService {
     }
 
     public ArrayList<HashMap<String, Object>> findAll() {
-
         return homeIoTMapper.findAll();
     }
 
