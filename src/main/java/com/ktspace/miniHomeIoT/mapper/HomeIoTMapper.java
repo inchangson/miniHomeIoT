@@ -2,7 +2,6 @@ package com.ktspace.miniHomeIoT.mapper;
 
 import com.ktspace.miniHomeIoT.domain.*;
 import org.apache.ibatis.annotations.Mapper;
-import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Mapper
-@Repository
+//@Repository
 public interface HomeIoTMapper {
 
     ArrayList<HashMap<String, Object>> findAll();
