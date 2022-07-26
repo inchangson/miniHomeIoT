@@ -14,6 +14,8 @@ import java.util.Optional;
 @RestController
 public class HomeIoTController {
     private final HomeIoTService homeIotService;
+    private final String CODE_NA = "000";
+    private final String CODE_SUCCEED = "200";
 
     @Autowired
     public HomeIoTController(HomeIoTService homeIotService) {
@@ -21,21 +23,28 @@ public class HomeIoTController {
         this.homeIotService = homeIotService;
     }
 
+    private String getResultCode(ResponseDTO responseDTO){
+        if (responseDTO.getData() == null) {
+            return CODE_NA;
+        }
+        return CODE_SUCCEED;
+    }
 
     @RequestMapping(value = "findAll", method = RequestMethod.POST)
     public ResponseEntity<?> findAll() {
         ResponseDTO responseDTO = new ResponseDTO();
-        responseDTO.setResultCode("S0001");
         responseDTO.setData(homeIotService.findAll());
+        responseDTO.setResultCode(getResultCode(responseDTO));
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/devices", method = RequestMethod.GET)
-    @ResponseBody
     //장치 목록 조회 : 관련된 리소스 모두 가져옴
-    public List<Device> getUserDevices(@RequestHeader("userId") String userId) {
-//        String userId = "test";
-        return homeIotService.getUserDevices(userId);
+    public ResponseEntity<?> getUserDevices(@RequestHeader("userId") String userId) {
+        ResponseDTO responseDTO = new ResponseDTO();
+        responseDTO.setData(homeIotService.getUserDevices(userId));
+        responseDTO.setResultCode(getResultCode(responseDTO));
+        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/devices/{deviceSeq}", method = RequestMethod.GET)
