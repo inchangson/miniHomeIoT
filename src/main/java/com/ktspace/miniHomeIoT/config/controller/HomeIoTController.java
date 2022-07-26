@@ -1,8 +1,7 @@
-package com.ktspace.miniHomeIoT.controller;
+package com.ktspace.miniHomeIoT.config.controller;
 
 import com.ktspace.miniHomeIoT.domain.Device;
-import com.ktspace.miniHomeIoT.domain.Resource;
-import com.ktspace.miniHomeIoT.domain.ResourceGroup;
+import com.ktspace.miniHomeIoT.dto.ResponseDTO;
 import com.ktspace.miniHomeIoT.service.HomeIoTService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,32 +26,9 @@ public class HomeIoTController {
     public ResponseEntity<?> findAll() {
         ResponseDTO responseDTO = new ResponseDTO();
         responseDTO.setResultCode("S0001");
-        responseDTO.setRes(homeIotService.findAll());
+        responseDTO.setData(homeIotService.findAll());
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
-
-    //temp class
-    public class ResponseDTO{
-        private String resultCode;
-        private Object res;
-
-        public String getResultCode() {
-            return resultCode;
-        }
-
-        public void setResultCode(String resultCode) {
-            this.resultCode = resultCode;
-        }
-
-        public Object getRes() {
-            return res;
-        }
-
-        public void setRes(Object res) {
-            this.res = res;
-        }
-    }
-
 
     @RequestMapping(value = "/devices", method = RequestMethod.GET)
     @ResponseBody
