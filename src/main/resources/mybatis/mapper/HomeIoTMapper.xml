@@ -3,7 +3,10 @@
 <mapper namespace="com.ktspace.miniHomeIoT.mapper.HomeIoTMapper">
 
     <select id="findAll" resultType="HashMap">
-        select * from customer;
+        select *
+        from
+            customer;
+
     </select>
 
 </mapper>

@@ -7,6 +7,6 @@ import java.util.HashMap;
 
 @Mapper
 public interface DeviceMapper {
-    HashMap<String, Object> findByDeviceId();
-    ArrayList<HashMap<String, Object>> findAllByUserId();
+    HashMap<String, Object> findByDeviceSeq(int devSeq);
+    ArrayList<HashMap<String, Object>> findAllByUserId(String userId);
 }

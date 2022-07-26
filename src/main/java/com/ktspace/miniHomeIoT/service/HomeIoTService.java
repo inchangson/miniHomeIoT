@@ -3,6 +3,7 @@ package com.ktspace.miniHomeIoT.service;
 import com.ktspace.miniHomeIoT.domain.Device;
 import com.ktspace.miniHomeIoT.domain.Resource;
 import com.ktspace.miniHomeIoT.domain.ResourceGroup;
+import com.ktspace.miniHomeIoT.mapper.DeviceMapper;
 import com.ktspace.miniHomeIoT.mapper.HomeIoTMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,19 +15,22 @@ import java.util.Optional;
 @Service
 public class HomeIoTService {
     HomeIoTMapper homeIoTMapper;
+    DeviceMapper deviceMapper;
 
     @Autowired
-    public HomeIoTService(HomeIoTMapper homeIoTMapper) {
+    public HomeIoTService(HomeIoTMapper homeIoTMapper, DeviceMapper deviceMapper) {
+
         this.homeIoTMapper = homeIoTMapper;
+        this.deviceMapper = deviceMapper;
     }
 
     public ArrayList<HashMap<String, Object>> findAll() {
         return homeIoTMapper.findAll();
     }
 
-    public List<Device> getUserDevices(String userId) {
+    public ArrayList<HashMap<String, Object>> getUserDevices(String userId) {
 
-        return homeIoTMapper.findAllDevices(userId);
+        return deviceMapper.findAllByUserId(userId);
     }
 
     public Optional<Device> readDeviceInfo(int devSeq) {

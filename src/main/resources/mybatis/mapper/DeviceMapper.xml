@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ktspace.miniHomeIoT.mapper.DeviceMapper">
+
+    <select id="findByDeviceSeq" parameterType="int" resultType="HashMap">
+        select * from device d where d.dvc_seq = #{devSeq};
+    </select>
+    <select id="findAllByUserId" parameterType="string" resultType="HashMap">
+        select
+            s.svc_seq as "serviceTargetSeq",
+            c2.external_id as "external",
+            d.dvc_seq as "deviceSeq",
+            m.model_code as "modelTypeCode",
+            m.model_id as "modelId",
+            d.dvc_name as "deviceName"
+        from
+            service s
+                join customer c1
+                     on s.cust_id = c1.cust_id
+                join device d
+                     on d.cust_id = c1.cust_id
+                join model m
+                     on d.model_id = m.model_id
+                join company c2
+                     on m.comp_id = c2.comp_id
+        where d.cust_id = #{userId};
+    </select>
+
+</mapper>

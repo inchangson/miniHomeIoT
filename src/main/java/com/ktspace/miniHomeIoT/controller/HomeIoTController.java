@@ -1,4 +1,4 @@
-package com.ktspace.miniHomeIoT.config.controller;
+package com.ktspace.miniHomeIoT.controller;
 
 import com.ktspace.miniHomeIoT.domain.Device;
 import com.ktspace.miniHomeIoT.dto.ResponseDTO;
