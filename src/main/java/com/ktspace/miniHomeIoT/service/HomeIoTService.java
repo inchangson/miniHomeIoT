@@ -2,7 +2,7 @@ package com.ktspace.miniHomeIoT.service;
 
 import com.ktspace.miniHomeIoT.domain.Device;
 import com.ktspace.miniHomeIoT.domain.Resource;
-import com.ktspace.miniHomeIoT.domain.ResourceGroup;
+import com.ktspace.miniHomeIoT.domain.enums.ResourceGroup;
 import com.ktspace.miniHomeIoT.mapper.DeviceMapper;
 import com.ktspace.miniHomeIoT.mapper.HomeIoTMapper;
 import com.ktspace.miniHomeIoT.mapper.ResourceMapper;

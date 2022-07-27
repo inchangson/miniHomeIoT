@@ -1,6 +1,7 @@
 package com.ktspace.miniHomeIoT.mapper;
 
 import com.ktspace.miniHomeIoT.domain.*;
+import com.ktspace.miniHomeIoT.domain.enums.ResourceGroup;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.ArrayList;

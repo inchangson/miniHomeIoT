@@ -1,5 +1,7 @@
 package com.ktspace.miniHomeIoT.domain;
 
+import com.ktspace.miniHomeIoT.domain.enums.Company;
+
 import java.util.Optional;
 
 public class _Model {

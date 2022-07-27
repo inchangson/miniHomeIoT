@@ -1,4 +1,4 @@
-package com.ktspace.miniHomeIoT.domain;
+package com.ktspace.miniHomeIoT.domain.enums;
 
 public enum Company {
     GOQUAL("GOQUAL", "HOME_IOT_GOQUAL"),

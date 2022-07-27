@@ -1,4 +1,4 @@
-package com.ktspace.miniHomeIoT.domain;
+package com.ktspace.miniHomeIoT.domain.enums;
 
 public enum ResourceGroup {
     CONN_STAT("connection-status", "value", "boolean", "연결"),
