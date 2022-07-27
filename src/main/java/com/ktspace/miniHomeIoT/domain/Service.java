@@ -1,27 +1,16 @@
 package com.ktspace.miniHomeIoT.domain;
 
-import java.time.LocalDateTime;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+import java.time.LocalDateTime;
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 public class Service {
     private Integer seq;
     private LocalDateTime createDate;
-
-    //region getter and setter
-    public Integer getSeq() {
-        return seq;
-    }
-
-    public void setSeq(Integer seq) {
-        this.seq = seq;
-    }
-
-    public LocalDateTime getCreateDate() {
-        return createDate;
-    }
-
-    public void setCreateDate(LocalDateTime createDate) {
-        this.createDate = createDate;
-    }
-    //endregion
-
 }
