@@ -19,7 +19,6 @@ public class HomeIoTService {
 
     @Autowired
     public HomeIoTService(HomeIoTMapper homeIoTMapper, DeviceMapper deviceMapper) {
-
         this.homeIoTMapper = homeIoTMapper;
         this.deviceMapper = deviceMapper;
     }
@@ -28,9 +27,15 @@ public class HomeIoTService {
         return homeIoTMapper.findAll();
     }
 
-    public ArrayList<HashMap<String, Object>> getUserDevices(String userId) {
+    public HashMap<String, Object> getUserDevices(String userId) {
+        HashMap<String, Object> result = new HashMap<>();
 
-        return deviceMapper.findAllByUserId(userId);
+        ArrayList<HashMap<String, Object>> deviceList = deviceMapper.findAllByUserId(userId);
+
+        result.put("deviceCount", deviceList.size());
+        result.put("deviceList", deviceList);
+
+        return result;
     }
 
     public Optional<Device> readDeviceInfo(int devSeq) {
