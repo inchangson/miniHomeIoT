@@ -5,22 +5,24 @@ import com.ktspace.miniHomeIoT.domain.Resource;
 import com.ktspace.miniHomeIoT.domain.ResourceGroup;
 import com.ktspace.miniHomeIoT.mapper.DeviceMapper;
 import com.ktspace.miniHomeIoT.mapper.HomeIoTMapper;
+import com.ktspace.miniHomeIoT.mapper.ResourceMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Optional;
 @Service
 public class HomeIoTService {
     HomeIoTMapper homeIoTMapper;
     DeviceMapper deviceMapper;
+    ResourceMapper resourceMapper;
 
     @Autowired
-    public HomeIoTService(HomeIoTMapper homeIoTMapper, DeviceMapper deviceMapper) {
+    public HomeIoTService(HomeIoTMapper homeIoTMapper, DeviceMapper deviceMapper, ResourceMapper resourceMapper) {
         this.homeIoTMapper = homeIoTMapper;
         this.deviceMapper = deviceMapper;
+        this.resourceMapper = resourceMapper;
     }
 
     public ArrayList<HashMap<String, Object>> findAll() {
@@ -31,6 +33,11 @@ public class HomeIoTService {
         HashMap<String, Object> result = new HashMap<>();
 
         ArrayList<HashMap<String, Object>> deviceList = deviceMapper.findAllByUserId(userId);
+
+        for(HashMap device : deviceList){
+            //굳이 바꿔줘야 하나..
+            device.put("resource", resourceMapper.findByDvcSeq((int)device.get("deviceSeq")));
+        }
 
         result.put("deviceCount", deviceList.size());
         result.put("deviceList", deviceList);
