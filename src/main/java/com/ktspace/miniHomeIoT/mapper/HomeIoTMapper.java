@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Optional;
 
 @Mapper
-//@Repository
 public interface HomeIoTMapper {
 
     ArrayList<HashMap<String, Object>> findAll();
