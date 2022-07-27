@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ktspace.miniHomeIoT.mapper.ResourceMapper">
+
+    <select id="findByDvcSeq" parameterType="int" resultType="HashMap">
+    select rt.rsc_type_group as "group", rt.rsc_type_code as "code", r.rsc_value
+    from resource r
+             join resource_type rt
+                  on r.rsc_type_seq = rt.rsc_type_seq
+    where r.dvc_seq = #{dvcSeq};
+    </select>
+
+</mapper>
