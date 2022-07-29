@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -16,7 +18,5 @@ public class DeviceStatusDTO {
     String modelTypeCode;
     String modelId;
     String deviceName;
-    String group;
-    String code;
-    String value;
+    List<ResourceDTO> resource;
 }
