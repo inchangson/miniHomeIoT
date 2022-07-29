@@ -1,12 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ktspace.miniHomeIoT.mapper.DeviceMapper">
-
-    <select id="findByDeviceSeq" parameterType="int" resultType="HashMap">
-        select * from device d where d.dvc_seq = #{devSeq};
-    </select>
-
-    <select id="findAllByUserId"  resultType="HashMap">
+    <resultMap id="deviceResultMap" type="com.ktspace.miniHomeIoT.dto.DeviceStatusDTO">
+        <result column="serviceTargetSeq" property="serviceTargetSeq"/>
+        <result column="external" property="external"/>
+        <result column="deviceSeq" property="deviceSeq"/>
+        <result column="modelTypeCode" property="modelTypeCode"/>
+        <result column="modelId" property="modelId"/>
+        <result column="deviceName" property="deviceName"/>
+        <collection property="resource" javaType="ArrayList" column="deviceSeq"
+                    ofType="com.ktspace.miniHomeIoT.dto.ResourceDTO"
+            select ="selectResourcesForDevice">
+<!--                            select ="com.ktspace.mapper.ResourceMapper.selectResourcesForDevice2">-->
+            <result column="group" property="group"/>
+            <result column="code" property="code"/>
+            <result column="value" property="value"/>
+        </collection>
+    </resultMap>
+    <select id="findDeviceStatusList" resultMap="deviceResultMap">
         select
             service.svc_seq as "serviceTargetSeq",
             company.external_id as "external",
@@ -15,13 +26,22 @@
             model.model_id as "modelId",
             device.dvc_name as "deviceName"
         from service, customer, device, model, company
-        where device.cust_id = #{userId}
-            and device.cust_id = customer.cust_id
-            and service.cust_id = customer.cust_id
-            and device.model_id = model.model_id
-            and model.comp_id = company.comp_id
-<!--            <if test="dvcSeq != null">-->
-<!--            and d.dvc_seq = #{dvcSeq}-->
-<!--            </if>-->
+        where device.cust_id = customer.cust_id
+          and service.cust_id = customer.cust_id
+          and device.model_id = model.model_id
+          and model.comp_id = company.comp_id
+          <if test="userId != null">
+          and device.cust_id = #{userId}
+          </if>
+          <if test="dvcSeq != null">
+          and device.dvc_seq = #{dvcSeq}
+          </if>
+          ;
+    </select>
+    <select id="selectResourcesForDevice" parameterType="int"  resultType="com.ktspace.miniHomeIoT.dto.ResourceDTO">
+        select resource_type.rsc_type_group as "group", resource_type.rsc_type_code as "code", resource.rsc_value as "value"
+        from resource, resource_type
+        where resource.rsc_type_seq = resource_type.rsc_type_seq
+        and resource.dvc_seq = #{deviceSeq};
     </select>
 </mapper>
