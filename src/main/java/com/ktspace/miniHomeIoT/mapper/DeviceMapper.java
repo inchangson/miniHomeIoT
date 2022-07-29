@@ -29,5 +29,5 @@ public interface DeviceMapper {
     */
     ArrayList<DeviceStatusDTO> findDeviceStatusList(DeviceVO param);
     Integer getDvcCntBydvcSeq(@Param("dvcSeq") Integer dvcSeq);
-    void deleteDeviceByDvcSeq(@Param("dvcSeq") Integer dvcSeq);
+    void deleteDvcByDvcSeq(@Param("dvcSeq") Integer dvcSeq);
 }

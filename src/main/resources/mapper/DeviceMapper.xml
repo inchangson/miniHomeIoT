@@ -44,4 +44,15 @@
         where resource.rsc_type_seq = resource_type.rsc_type_seq
         and resource.dvc_seq = #{deviceSeq};
     </select>
+
+    <select id="getDvcCntBydvcSeq" parameterType="int" resultType="int">
+        select count(*) from device where device.dvc_seq = #{dvcSeq};
+    </select>
+
+    <delete
+            id="deleteDvcByDvcSeq"
+            parameterType="int">
+        delete from device where device.dvc_seq = #{dvcSeq};
+    </delete>
+
 </mapper>
