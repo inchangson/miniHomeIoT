@@ -1,11 +1,15 @@
 package com.ktspace.miniHomeIoT.controller;
 
+import com.ktspace.miniHomeIoT.dto.ResourceDTO;
 import com.ktspace.miniHomeIoT.dto.ResponseDTO;
 import com.ktspace.miniHomeIoT.service.HomeIoTService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 @RestController
 public class HomeIoTController {
@@ -45,12 +49,14 @@ public class HomeIoTController {
     }
 
     @RequestMapping(value = "/devices/{deviceSeq}", method = RequestMethod.PUT)
-    public String controlResource(@PathVariable(value = "deviceSeq") int devSeq) {
+    public ResponseEntity<?> controlResource(@PathVariable(value = "deviceSeq") int dvcSeq, @RequestBody HashMap<String, Object> map) {
         //장치 리소스 수정
-        String rscGrp = "test";
-        String value = "test";
+        HashMap<String, String> resourceDTO = (HashMap<String, String>) map.get("resource");
+        ResponseDTO responseDTO = new ResponseDTO();
+        responseDTO.setData(homeIotService.controlResource(dvcSeq, resourceDTO.get("group"), resourceDTO.get("value")));
+        responseDTO.setResultCode(getResultCode(responseDTO));
 
-        return homeIotService.controlResource(devSeq, rscGrp, value);
+        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/devices/{deviceSeq}", method = RequestMethod.DELETE)

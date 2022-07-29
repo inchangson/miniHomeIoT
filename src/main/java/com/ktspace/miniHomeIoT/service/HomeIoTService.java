@@ -46,17 +46,35 @@ public class HomeIoTService {
         return result;
     }
 
-    public String controlResource(int devSeq, String rscGrpName, String value) {
-//        Resource resource = new Resource(ResourceGroup.findByName(rscGrpName), value);
-//
-//        homeIoTMapper.saveResource(resource, devSeq);
-//
-        boolean isSucceed = false;
-//        value.equals(homeIoTMapper
-//                .getResource(ResourceGroup.findByName(rscGrpName), devSeq)
-//                .getValue());
+    private HashMap<String, Object> getRscCtrlSucceedData(int dvcSeq, String rscGrp, String value) {
 
-        return isSucceed ? "제어 성공" : "제어 실패";
+
+        HashMap<String, String> curRsc = resourceMapper.findResources(dvcSeq, rscGrp).get(0);
+//        if (curRsc == null){
+//            return
+//        }
+        String code;
+        String msg;
+        if (value.equals(curRsc.get("value"))){
+            code = "200";
+            msg = "제어성공";
+        }
+        else{
+            code = "";
+            msg = "제어실패";
+        }
+        HashMap<String, Object> result = new HashMap<String, Object>() {{
+            put("resultCode", code);
+            put("Message", msg);
+        }};
+
+        return result;
+    }
+
+    public HashMap<String, Object> controlResource(int dvcSeq, String rscGroup, String value) {
+        System.out.println("dvcSeq = " + dvcSeq + ", rscGroup = " + rscGroup + ", value = " + value);
+        resourceMapper.updateRscValueByDvcSeq(dvcSeq, rscGroup, value);
+        return getRscCtrlSucceedData(dvcSeq, rscGroup, value);
     }
 
     private String getDeleteSucceedMsg(int dvcSeq) {
