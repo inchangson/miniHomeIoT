@@ -9,5 +9,15 @@
                   on r.rsc_type_seq = rt.rsc_type_seq
     where r.dvc_seq = #{dvcSeq};
     </select>
-
+    <update
+            id="updateRscValueByDvcSeq">
+        update resource
+        set resource.rsc_value = 'test2'
+        where resource.rsc_seq = (
+            select resource.rsc_seq
+            from  resource_type
+            where resource.rsc_type_seq = resource_type.rsc_type_seq
+              and resource_type.rsc_type_group=#{rscType}
+              and resource.dvc_seq = #{dvcSeq});
+    </update>
 </mapper>
