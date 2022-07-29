@@ -68,8 +68,19 @@ public class HomeIoTService {
         return isSucceed ? "제어 성공" : "제어 실패";
     }
 
-    public void deleteDevice(int devSeq) {
-        homeIoTMapper.removeDevice(devSeq);
+    private String getDeleteSucceedMsg(int dvcSeq){
+        if (deviceMapper.getDvcCntBydvcSeq(dvcSeq) != 0) {
+            return String.format("[deviceSeq : %d] 장치 삭제 실패\n", dvcSeq);
+        } else {
+            return String.format("[deviceSeq : %d] 장치 삭제 성공\n", dvcSeq);
+        }
+    }
+    public Map<String,Object> deleteDevice(int dvcSeq) {
+        Map<String,Object> result = new HashMap<>();
+        deviceMapper.deleteDvcByDvcSeq(dvcSeq);
+        result.put("message", getDeleteSucceedMsg(dvcSeq));
+
+        return result;
     }
 
 
