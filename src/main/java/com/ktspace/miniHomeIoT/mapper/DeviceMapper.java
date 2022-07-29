@@ -10,7 +10,8 @@ import java.util.ArrayList;
 @Mapper
 public interface DeviceMapper {
     /*  1. VO 를 통해서 넘겨주는 방식 vs Param으로 설정하는 방식
-        - 객체 단위로 관리하는 것이 더 안전할 것이라 생각해서 앞의 방식 선택
+        - 객체 단위로 관리하는 것이 더 안전->재사용성))할 것이라 생각해서 앞의 방식 선택
+        ...진짜그럴까?
 
         2. 리스트 or HashMap으로 응답 vs DTO 활용
         - 값을 명확히 주기엔 map이나, 2차원 list 형식이 되어야할 것 같은데,

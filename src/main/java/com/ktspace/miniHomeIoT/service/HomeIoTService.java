@@ -15,7 +15,6 @@ import java.util.Map;
 public class HomeIoTService {
     DeviceMapper deviceMapper;
     ResourceMapper resourceMapper;
-
     @Autowired
     public HomeIoTService(DeviceMapper deviceMapper, ResourceMapper resourceMapper) {
         this.deviceMapper = deviceMapper;
@@ -26,10 +25,12 @@ public class HomeIoTService {
         // 함수명 변경,
         // 이왕 요청에서 있는 서비스나 모델의 정보를 통해 맞게 가지고왔는지..
         // 데이터 정합성 체크도 해볼 수 있음.. 일단 3, 4 기능 구현 이후 고민
+
+        // userId에 대한 처리 같이 해주기 !
         ArrayList<DeviceStatusDTO> deviceStatusList = deviceMapper.findDeviceStatusList(new DeviceVO(null, devSeq));
 
         if (deviceStatusList.isEmpty()) {
-            return new DeviceStatusDTO();
+            return new DeviceStatusDTO();//차라리 없다는 거에 대한 메시지를 넘겨주는 걸로..
         } else {
             return deviceMapper.findDeviceStatusList(new DeviceVO(null, devSeq)).get(0);
         }
@@ -46,35 +47,32 @@ public class HomeIoTService {
         return result;
     }
 
-    private HashMap<String, Object> getRscCtrlSucceedData(int dvcSeq, String rscGrp, String value) {
-
-
+    private HashMap<String, Object> getRscCtrlRsltData(int dvcSeq, String rscGrp, String value) {
         HashMap<String, String> curRsc = resourceMapper.findResources(dvcSeq, rscGrp).get(0);
-//        if (curRsc == null){
-//            return
-//        }
+        HashMap<String, Object> result = new HashMap<String, Object>();
+
         String code;
         String msg;
+
         if (value.equals(curRsc.get("value"))){
             code = "200";
             msg = "제어성공";
         }
         else{
-            code = "";
+            code = "500";
             msg = "제어실패";
         }
-        HashMap<String, Object> result = new HashMap<String, Object>() {{
-            put("resultCode", code);
-            put("Message", msg);
-        }};
+
+        result.put("resultCode", code);
+        result.put("resultMessage", msg);
 
         return result;
     }
 
     public HashMap<String, Object> controlResource(int dvcSeq, String rscGroup, String value) {
-        System.out.println("dvcSeq = " + dvcSeq + ", rscGroup = " + rscGroup + ", value = " + value);
         resourceMapper.updateRscValueByDvcSeq(dvcSeq, rscGroup, value);
-        return getRscCtrlSucceedData(dvcSeq, rscGroup, value);
+        //resource_log 추가..
+        return getRscCtrlRsltData(dvcSeq, rscGroup, value);
     }
 
     private String getDeleteSucceedMsg(int dvcSeq) {
