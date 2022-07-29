@@ -8,5 +8,6 @@ import java.util.HashMap;
 @Mapper
 public interface ResourceMapper {
     ArrayList<HashMap<String, String>> findByDvcSeq(int dvcSeq);
+
     void updateRscValueByDvcSeq(int dvcSeq);
 }

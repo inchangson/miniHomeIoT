@@ -18,12 +18,16 @@ public enum ResourceGroup {
         this.korName = korName;
     }
 
-    public static ResourceGroup findByName(String name){
-        switch (name){
-            case "connection-status" : return CONN_STAT;
-            case "power-switch"      : return PWR_SWITCH;
-            case "open-button"       : return OPEN_BUTTON;
-            default: /*throw error*/return ERROR;
+    public static ResourceGroup findByName(String name) {
+        switch (name) {
+            case "connection-status":
+                return CONN_STAT;
+            case "power-switch":
+                return PWR_SWITCH;
+            case "open-button":
+                return OPEN_BUTTON;
+            default: /*throw error*/
+                return ERROR;
         }
     }
 
