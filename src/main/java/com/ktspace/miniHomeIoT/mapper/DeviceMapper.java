@@ -6,8 +6,6 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 @Mapper
 public interface DeviceMapper {
@@ -29,7 +27,7 @@ public interface DeviceMapper {
         - 아울러 ResourceDTO 를 분리 해도 이는 정확히 Resource Entity Class 의 DT 기능만을 하는 객체라고 보기 어려움
         - 현재 서비스 단에서는 ResourceGroup Enum 을 사용하고 있기 때문
     */
-    ArrayList<DeviceStatusDTO> findDeviceStatus(DeviceVO param);
-//    HashMap<String, Object> findByDeviceSeq(int devSeq);
-//    ArrayList<HashMap<String, Object>> findAllByUserId(@Param("userId") String userId);
+    ArrayList<DeviceStatusDTO> findDeviceStatusList(DeviceVO param);
+    Integer getDvcCntBydvcSeq(@Param("dvcSeq") Integer dvcSeq);
+    void deleteDeviceByDvcSeq(@Param("dvcSeq") Integer dvcSeq);
 }
