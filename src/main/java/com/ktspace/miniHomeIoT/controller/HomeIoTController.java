@@ -50,8 +50,11 @@ public class HomeIoTController {
     @RequestMapping(value = "/devices/{deviceSeq}", method = RequestMethod.GET)
 //    @ResponseBody
     //장치 리소스 조회
-    public Optional<Device> readDeviceInfo(@PathVariable(value = "deviceSeq") int devSeq) {//@RequestHeader("serviceSeq") String serviceSeq) {
-        return homeIotService.readDeviceInfo(devSeq);
+    public ResponseEntity<?> readDeviceInfo(@PathVariable(value = "deviceSeq") int dvcSeq) {//@RequestHeader("serviceSeq") String serviceSeq) {
+        ResponseDTO responseDTO = new ResponseDTO();
+        responseDTO.setData(homeIotService.readDeviceInfo(dvcSeq));
+        responseDTO.setResultCode(getResultCode(responseDTO));
+        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/devices/{deviceSeq}", method = RequestMethod.PUT)

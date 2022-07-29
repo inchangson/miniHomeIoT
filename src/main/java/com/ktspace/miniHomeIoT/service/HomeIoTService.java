@@ -32,6 +32,18 @@ public class HomeIoTService {
     public ArrayList<HashMap<String, Object>> findAll() {
         return homeIoTMapper.findAll();
     }
+    public DeviceStatusDTO readDeviceInfo(int devSeq) {
+        // 함수명 변경,
+        // 이왕 요청에서 있는 서비스나 모델의 정보를 통해 맞게 가지고왔는지..
+        // 데이터 정합성 체크도 해볼 수 있음.. 일단 3, 4 기능 구현 이후 고민
+        ArrayList<DeviceStatusDTO> deviceStatusList = deviceMapper.findDeviceStatusList(new DeviceVO(null, devSeq));
+
+        if (deviceStatusList.isEmpty()) {
+            return new DeviceStatusDTO();
+        } else {
+            return deviceMapper.findDeviceStatusList(new DeviceVO(null, devSeq)).get(0);
+        }
+    }
 
     public HashMap<String, Object> getUserDevices(String userId) {
         HashMap<String, Object> result = new HashMap<>();
@@ -42,10 +54,6 @@ public class HomeIoTService {
         result.put("deviceList", dvcStatusDTOList);
 
         return result;
-    }
-
-    public Optional<Device> readDeviceInfo(int devSeq) {
-        return homeIoTMapper.findByDeviceSeq(devSeq);
     }
 
     public String controlResource(int devSeq, String rscGrpName, String value) {
