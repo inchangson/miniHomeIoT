@@ -68,9 +68,11 @@ public class HomeIoTController {
     }
 
     @RequestMapping(value = "/devices/{deviceSeq}", method = RequestMethod.DELETE)
-//    @ResponseBody
-    public void deleteDevice(@PathVariable(value = "deviceSeq") int devSeq) {//@RequestHeader("serviceSeq") String serviceSeq) {
-        homeIotService.deleteDevice(devSeq);
+    public ResponseEntity<?> deleteDevice(@PathVariable(value = "deviceSeq") int devSeq) {
+        ResponseDTO responseDTO = new ResponseDTO();//알아서 날려주려나..?
+        responseDTO.setData(homeIotService.deleteDevice(devSeq));
+        responseDTO.setResultCode(getResultCode(responseDTO));
+        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/devices/{deviceSeq}", method = RequestMethod.POST)
