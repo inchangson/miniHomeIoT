@@ -72,6 +72,7 @@ public class HomeIoTService {
     public HashMap<String, Object> controlResource(int dvcSeq, String rscGroup, String value) {
         resourceMapper.updateRscValueByDvcSeq(dvcSeq, rscGroup, value);
         //resource_log 추가..
+        resourceMapper.insertRscLog(dvcSeq, rscGroup, value);
         return getRscCtrlRsltData(dvcSeq, rscGroup, value);
     }
 
