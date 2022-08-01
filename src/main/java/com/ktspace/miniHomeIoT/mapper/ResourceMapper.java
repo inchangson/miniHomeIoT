@@ -11,7 +11,7 @@ public interface ResourceMapper {
     ArrayList<HashMap<String, String>> findResources(@Param("dvcSeq") Integer dvcSeq,
                                                      @Param("rscGrp") String rscGrp);
 
-    void updateRscValueByDvcSeq(@Param("dvcSeq") Integer dvcSeq,
+    Integer updateRscValueByDvcSeq(@Param("dvcSeq") Integer dvcSeq,
                                 @Param("rscGrp") String rscGrp,
                                 @Param("value") String value);
 

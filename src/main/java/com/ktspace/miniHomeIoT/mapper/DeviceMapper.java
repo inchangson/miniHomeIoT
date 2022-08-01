@@ -31,5 +31,5 @@ public interface DeviceMapper {
 
     Integer getDvcCntBydvcSeq(@Param("dvcSeq") Integer dvcSeq);
 
-    void deleteDvcByDvcSeq(@Param("dvcSeq") Integer dvcSeq);
+    Integer deleteDvcByDvcSeq(@Param("dvcSeq") Integer dvcSeq);
 }

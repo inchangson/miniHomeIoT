@@ -15,25 +15,22 @@ import java.util.Map;
 public class HomeIoTService {
     DeviceMapper deviceMapper;
     ResourceMapper resourceMapper;
+    final int    SUCCEED_CODE   = 200;
+    final int    FAIL_CODE      = 500;
+    final String SUCCEED_MSG    = "제어 성공";
+    final String FAIL_MSG       = "제어 실패";
+
+
     @Autowired
     public HomeIoTService(DeviceMapper deviceMapper, ResourceMapper resourceMapper) {
         this.deviceMapper = deviceMapper;
         this.resourceMapper = resourceMapper;
     }
 
-    public DeviceStatusDTO readDeviceInfo(int devSeq) {
-        // 함수명 변경,
-        // 이왕 요청에서 있는 서비스나 모델의 정보를 통해 맞게 가지고왔는지..
-        // 데이터 정합성 체크도 해볼 수 있음.. 일단 3, 4 기능 구현 이후 고민
-
-        // userId에 대한 처리 같이 해주기 !
-        ArrayList<DeviceStatusDTO> deviceStatusList = deviceMapper.findDvcList(new DeviceVO(null, devSeq));
-
-        if (deviceStatusList.isEmpty()) {
-            return new DeviceStatusDTO();//차라리 없다는 거에 대한 메시지를 넘겨주는 걸로..
-        } else {
-            return deviceMapper.findDvcList(new DeviceVO(null, devSeq)).get(0);
-        }
+    public DeviceStatusDTO readDeviceInfo(String userId, Integer devSeq) {
+        ArrayList<DeviceStatusDTO> deviceStatusList = deviceMapper.findDvcList(new DeviceVO(userId, devSeq));
+        DeviceStatusDTO result = deviceMapper.findDvcList(new DeviceVO(null, devSeq)).get(0);
+        return result;
     }
 
     public HashMap<String, Object> getUserDevices(String userId) {
@@ -47,47 +44,32 @@ public class HomeIoTService {
         return result;
     }
 
-    private HashMap<String, Object> getRscCtrlRsltData(int dvcSeq, String rscGrp, String value) {
-        HashMap<String, String> curRsc = resourceMapper.findResources(dvcSeq, rscGrp).get(0);
+    public HashMap<String, Object> controlResource(int dvcSeq, String rscGroup, String value) {
+        Integer updatedRowCnt = resourceMapper.updateRscValueByDvcSeq(dvcSeq, rscGroup, value);
         HashMap<String, Object> result = new HashMap<String, Object>();
-
-        String code;
+        int code;
         String msg;
-
-        if (value.equals(curRsc.get("value"))){
-            code = "200";
-            msg = "제어성공";
+        if (updatedRowCnt == 0){
+            code = FAIL_CODE;
+            msg = FAIL_MSG;
+        }else{
+            code = SUCCEED_CODE;
+            msg = SUCCEED_MSG;
+            resourceMapper.insertRscLog(dvcSeq, rscGroup, value);
         }
-        else{
-            code = "500";
-            msg = "제어실패";
-        }
-
         result.put("resultCode", code);
         result.put("resultMessage", msg);
-
         return result;
     }
 
-    public HashMap<String, Object> controlResource(int dvcSeq, String rscGroup, String value) {
-        resourceMapper.updateRscValueByDvcSeq(dvcSeq, rscGroup, value);
-        //resource_log 추가..
-        resourceMapper.insertRscLog(dvcSeq, rscGroup, value);
-        return getRscCtrlRsltData(dvcSeq, rscGroup, value);
-    }
-
-    private String getDeleteSucceedMsg(int dvcSeq) {
-        if (deviceMapper.getDvcCntBydvcSeq(dvcSeq) != 0) {
-            return String.format("[deviceSeq : %d] 장치 삭제 실패\n", dvcSeq);
-        } else {
-            return String.format("[deviceSeq : %d] 장치 삭제 성공\n", dvcSeq);
-        }
-    }
-
-    public Map<String, Object> deleteDevice(int dvcSeq) {
+    public Map<String, Object> deleteDevice(Integer dvcSeq) {
         Map<String, Object> result = new HashMap<>();
-        deviceMapper.deleteDvcByDvcSeq(dvcSeq);
-        result.put("message", getDeleteSucceedMsg(dvcSeq));
+        Integer deletedRowCnt = deviceMapper.deleteDvcByDvcSeq(dvcSeq);
+        if (deletedRowCnt == 0){
+            result.put("message", String.format("[deviceSeq : %d] 장치 삭제 실패\n", dvcSeq));
+        }else{
+            result.put("message", String.format("[deviceSeq : %d] 장치 삭제 성공\n", dvcSeq));
+        }
 
         return result;
     }

@@ -40,16 +40,16 @@ public class HomeIoTController {
     }
 
     @RequestMapping(value = "/devices/{deviceSeq}", method = RequestMethod.GET)
-    public ResponseEntity<?> readDeviceInfo(@PathVariable(value = "deviceSeq") int dvcSeq) {
+    public ResponseEntity<?> readDeviceInfo(@RequestHeader("userId") String userId, @PathVariable(value = "deviceSeq") Integer dvcSeq) {
         //장치 리소스 조회
         ResponseDTO responseDTO = new ResponseDTO();
-        responseDTO.setData(homeIotService.readDeviceInfo(dvcSeq));
+        responseDTO.setData(homeIotService.readDeviceInfo(userId, dvcSeq));
         responseDTO.setResultCode(getResultCode(responseDTO));
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/devices/{deviceSeq}", method = RequestMethod.PUT)
-    public ResponseEntity<?> controlResource(@PathVariable(value = "deviceSeq") int dvcSeq, @RequestBody HashMap<String, Object> map) {
+    public ResponseEntity<?> controlResource(@PathVariable(value = "deviceSeq") Integer dvcSeq, @RequestBody HashMap<String, Object> map) {
         //장치 리소스 수정
         HashMap<String, String> resourceDTO = (HashMap<String, String>) map.get("resource");
         ResponseDTO responseDTO = new ResponseDTO();
@@ -60,7 +60,7 @@ public class HomeIoTController {
     }
 
     @RequestMapping(value = "/devices/{deviceSeq}", method = RequestMethod.DELETE)
-    public ResponseEntity<?> deleteDevice(@PathVariable(value = "deviceSeq") int devSeq) {
+    public ResponseEntity<?> deleteDevice(@PathVariable(value = "deviceSeq") Integer devSeq) {
         // 장치 삭제
         ResponseDTO responseDTO = new ResponseDTO();//알아서 날려주려나..?
         responseDTO.setData(homeIotService.deleteDevice(devSeq));
