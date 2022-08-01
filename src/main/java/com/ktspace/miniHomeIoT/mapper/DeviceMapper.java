@@ -27,7 +27,7 @@ public interface DeviceMapper {
         - 아울러 ResourceDTO 를 분리 해도 이는 정확히 Resource Entity Class 의 DT 기능만을 하는 객체라고 보기 어려움
         - 일단은, dto 본래 의미에 맞게 데이터 전달용도로만 사용하는 것으로..
     */
-    ArrayList<DeviceStatusDTO> findDeviceStatusList(DeviceVO param);
+    ArrayList<DeviceStatusDTO> findDvcList(DeviceVO param);
 
     Integer getDvcCntBydvcSeq(@Param("dvcSeq") Integer dvcSeq);
 

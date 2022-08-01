@@ -10,14 +10,13 @@
         <result column="deviceName" property="deviceName"/>
         <collection property="resource" javaType="ArrayList" column="deviceSeq"
                     ofType="com.ktspace.miniHomeIoT.dto.ResourceDTO"
-            select ="selectResourcesForDevice">
-<!--                            select ="com.ktspace.mapper.ResourceMapper.selectResourcesForDevice2">-->
+            select ="selectRscForDvc">
             <result column="group" property="group"/>
             <result column="code" property="code"/>
             <result column="value" property="value"/>
         </collection>
     </resultMap>
-    <select id="findDeviceStatusList" resultMap="deviceResultMap">
+    <select id="findDvcList" resultMap="deviceResultMap">
         select
             service.svc_seq as "serviceTargetSeq",
             company.external_id as "external",
@@ -36,19 +35,18 @@
           <if test="dvcSeq != null">
           and device.dvc_seq = #{dvcSeq}
           </if>
-          ;
     </select>
-    <select id="selectResourcesForDevice" parameterType="int"  resultType="com.ktspace.miniHomeIoT.dto.ResourceDTO">
+    <select id="selectRscForDvc" parameterType="int"  resultType="com.ktspace.miniHomeIoT.dto.ResourceDTO">
         select resource_type.rsc_type_group as "group",
                resource_type.rsc_type_code as "code",
                resource.rsc_value as "value"
         from resource, resource_type
         where resource.rsc_type_seq = resource_type.rsc_type_seq
-        and resource.dvc_seq = #{deviceSeq};
+        and resource.dvc_seq = #{deviceSeq}
     </select>
 
     <select id="getDvcCntBydvcSeq" parameterType="int" resultType="int">
-        select count(*)
+        select count(dvc_seq)
         from device
         where device.dvc_seq = #{dvcSeq};
     </select>

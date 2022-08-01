@@ -27,19 +27,19 @@ public class HomeIoTService {
         // 데이터 정합성 체크도 해볼 수 있음.. 일단 3, 4 기능 구현 이후 고민
 
         // userId에 대한 처리 같이 해주기 !
-        ArrayList<DeviceStatusDTO> deviceStatusList = deviceMapper.findDeviceStatusList(new DeviceVO(null, devSeq));
+        ArrayList<DeviceStatusDTO> deviceStatusList = deviceMapper.findDvcList(new DeviceVO(null, devSeq));
 
         if (deviceStatusList.isEmpty()) {
             return new DeviceStatusDTO();//차라리 없다는 거에 대한 메시지를 넘겨주는 걸로..
         } else {
-            return deviceMapper.findDeviceStatusList(new DeviceVO(null, devSeq)).get(0);
+            return deviceMapper.findDvcList(new DeviceVO(null, devSeq)).get(0);
         }
     }
 
     public HashMap<String, Object> getUserDevices(String userId) {
         HashMap<String, Object> result = new HashMap<>();
 
-        ArrayList<DeviceStatusDTO> dvcStatusDTOList = deviceMapper.findDeviceStatusList(new DeviceVO(userId, null));
+        ArrayList<DeviceStatusDTO> dvcStatusDTOList = deviceMapper.findDvcList(new DeviceVO(userId, null));
 
         result.put("deviceCount", dvcStatusDTOList.size());
         result.put("deviceList", dvcStatusDTOList);
