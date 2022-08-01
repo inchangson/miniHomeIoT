@@ -14,4 +14,8 @@ public interface ResourceMapper {
     void updateRscValueByDvcSeq(@Param("dvcSeq") Integer dvcSeq,
                                 @Param("rscGrp") String rscGrp,
                                 @Param("value") String value);
+
+    Integer insertRscLog(@Param("dvcSeq") Integer dvcSeq,
+                         @Param("rscGrp") String rscGrp,
+                         @Param("value") String value);
 }

@@ -14,7 +14,6 @@
         <if test="rscGrp != null">
       and resource_type.rsc_type_group=#{rscGrp}
         </if>
-    ;
     </select>
 
     <update
@@ -26,6 +25,17 @@
             from  resource_type
             where resource.rsc_type_seq = resource_type.rsc_type_seq
               and resource_type.rsc_type_group=#{rscGrp}
-              and resource.dvc_seq = #{dvcSeq});
+              and resource.dvc_seq = #{dvcSeq})
     </update>
+
+    <insert
+        id="insertRscLog">
+        insert into resource_log (rsc_log_value, rsc_seq) values
+            (#{value}, (
+                select resource.rsc_seq
+                       from resource, resource_type
+                       where resource.rsc_type_seq = resource_type.rsc_type_seq
+                         and resource_type.rsc_type_group=#{rscGrp}
+                         and resource.dvc_seq = #{dvcSeq}))
+    </insert>
 </mapper>
