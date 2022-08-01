@@ -44,27 +44,25 @@ public class HomeIoTService {
         return result;
     }
 
-    public HashMap<String, Object> controlResource(int dvcSeq, String rscGroup, String value) {
-        Integer updatedRowCnt = resourceMapper.updateRscValueByDvcSeq(dvcSeq, rscGroup, value);
+    public HashMap<String, Object> controlResource(String userId, Integer dvcSeq, String rscGroup, String value) {
+        Integer updatedRowCnt = resourceMapper.updateRscValueByDvcSeq(userId, dvcSeq, rscGroup, value);
         HashMap<String, Object> result = new HashMap<String, Object>();
-        int code;
-        String msg;
+
         if (updatedRowCnt == 0){
-            code = FAIL_CODE;
-            msg = FAIL_MSG;
-        }else{
-            code = SUCCEED_CODE;
-            msg = SUCCEED_MSG;
-            resourceMapper.insertRscLog(dvcSeq, rscGroup, value);
+            result.put("resultCode", FAIL_CODE);
+            result.put("resultMessage", FAIL_MSG);
+            return result;
         }
-        result.put("resultCode", code);
-        result.put("resultMessage", msg);
+
+        result.put("resultCode", SUCCEED_CODE);
+        result.put("resultMessage", SUCCEED_MSG);
+        resourceMapper.insertRscLog(dvcSeq, rscGroup, value);
         return result;
     }
 
-    public Map<String, Object> deleteDevice(Integer dvcSeq) {
+    public Map<String, Object> deleteDevice(String userId, Integer dvcSeq) {
         Map<String, Object> result = new HashMap<>();
-        Integer deletedRowCnt = deviceMapper.deleteDvcByDvcSeq(dvcSeq);
+        Integer deletedRowCnt = deviceMapper.deleteDvcByDvcSeq(userId, dvcSeq);
         if (deletedRowCnt == 0){
             result.put("message", String.format("[deviceSeq : %d] 장치 삭제 실패\n", dvcSeq));
         }else{

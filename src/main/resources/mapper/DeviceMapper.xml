@@ -36,26 +36,27 @@
           and device.dvc_seq = #{dvcSeq}
           </if>
     </select>
-    <select id="selectRscForDvc" parameterType="int"  resultType="com.ktspace.miniHomeIoT.dto.ResourceDTO">
+    <select id="selectRscForDvc" resultType="com.ktspace.miniHomeIoT.dto.ResourceDTO">
         select resource_type.rsc_type_group as "group",
                resource_type.rsc_type_code as "code",
                resource.rsc_value as "value"
-        from resource, resource_type
+        from resource, resource_type, device
         where resource.rsc_type_seq = resource_type.rsc_type_seq
-        and resource.dvc_seq = #{deviceSeq}
+          and resource.dvc_seq = device.dvc_seq
+          and resource.dvc_seq = #{deviceSeq}
     </select>
 
-    <select id="getDvcCntBydvcSeq" parameterType="int" resultType="int">
+    <select id="getDvcCntBydvcSeq" resultType="int">
         select count(dvc_seq)
         from device
-        where device.dvc_seq = #{dvcSeq};
+        where device.dvc_seq = #{dvcSeq}
+          and device.cust_id = #{userId}
     </select>
 
-    <delete
-            id="deleteDvcByDvcSeq"
-            parameterType="int">
+    <delete id="deleteDvcByDvcSeq">
         delete from device
-        where device.dvc_seq = #{dvcSeq};
+        where device.dvc_seq = #{dvcSeq}
+          and device.cust_id = #{userId}
     </delete>
 
 </mapper>

@@ -1,6 +1,5 @@
 package com.ktspace.miniHomeIoT.controller;
 
-import com.ktspace.miniHomeIoT.dto.ResourceDTO;
 import com.ktspace.miniHomeIoT.dto.ResponseDTO;
 import com.ktspace.miniHomeIoT.service.HomeIoTService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 
 @RestController
 public class HomeIoTController {
@@ -49,21 +47,21 @@ public class HomeIoTController {
     }
 
     @RequestMapping(value = "/devices/{deviceSeq}", method = RequestMethod.PUT)
-    public ResponseEntity<?> controlResource(@PathVariable(value = "deviceSeq") Integer dvcSeq, @RequestBody HashMap<String, Object> map) {
+    public ResponseEntity<?> controlResource(@RequestHeader("userId") String userId, @PathVariable(value = "deviceSeq") Integer dvcSeq, @RequestBody HashMap<String, Object> map) {
         //장치 리소스 수정
         HashMap<String, String> resourceDTO = (HashMap<String, String>) map.get("resource");
         ResponseDTO responseDTO = new ResponseDTO();
-        responseDTO.setData(homeIotService.controlResource(dvcSeq, resourceDTO.get("group"), resourceDTO.get("value")));
+        responseDTO.setData(homeIotService.controlResource(userId, dvcSeq, resourceDTO.get("group"), resourceDTO.get("value")));
         responseDTO.setResultCode(getResultCode(responseDTO));
 
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/devices/{deviceSeq}", method = RequestMethod.DELETE)
-    public ResponseEntity<?> deleteDevice(@PathVariable(value = "deviceSeq") Integer devSeq) {
+    public ResponseEntity<?> deleteDevice(@RequestHeader("userId") String userId, @PathVariable(value = "deviceSeq") Integer devSeq) {
         // 장치 삭제
         ResponseDTO responseDTO = new ResponseDTO();//알아서 날려주려나..?
-        responseDTO.setData(homeIotService.deleteDevice(devSeq));
+        responseDTO.setData(homeIotService.deleteDevice(userId, devSeq));
         responseDTO.setResultCode(getResultCode(responseDTO));
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
