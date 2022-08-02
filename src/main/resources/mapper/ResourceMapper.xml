@@ -2,22 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ktspace.miniHomeIoT.mapper.ResourceMapper">
 
-    <select id="findResources" resultType="HashMap">
-    select resource_type.rsc_type_group as "group",
-           resource_type.rsc_type_code as "code",
-           resource.rsc_value as "value"
-    from resource, resource_type, device
-    where resource.rsc_type_seq = resource_type.rsc_type_seq
-      <if test="dvcSeq != null">
-      and resource.dvc_seq = device.dvc_seq
-      and device.cust_id = #{userId}
-      and resource.dvc_seq = #{dvcSeq}
-      </if>
-        <if test="rscGrp != null">
-      and resource_type.rsc_type_group=#{rscGrp}
-        </if>
-    </select>
-
     <update
             id="updateRscValueByDvcSeq">
         update resource

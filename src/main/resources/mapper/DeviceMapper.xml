@@ -46,13 +46,6 @@
           and resource.dvc_seq = #{deviceSeq}
     </select>
 
-    <select id="getDvcCntBydvcSeq" resultType="int">
-        select count(dvc_seq)
-        from device
-        where device.dvc_seq = #{dvcSeq}
-          and device.cust_id = #{userId}
-    </select>
-
     <delete id="deleteDvcByDvcSeq">
         delete from device
         where device.dvc_seq = #{dvcSeq}

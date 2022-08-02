@@ -7,29 +7,28 @@ import org.apache.ibatis.annotations.Param;
 
 import java.util.ArrayList;
 
+/**
+ * Device 관련 기능을 위한 매퍼 클래스입니다.
+ */
 @Mapper
 public interface DeviceMapper {
-    /*  1. VO 를 통해서 넘겨주는 방식 vs Param으로 설정하는 방식
-        - 객체 단위로 관리하는 것이 더 안전->재사용성))할 것이라 생각해서 앞의 방식 선택
-        ...진짜그럴까?
-
-        2. 리스트 or HashMap으로 응답 vs DTO 활용
-        - 값을 명확히 주기엔 map이나, 2차원 list 형식이 되어야할 것 같은데,
-        - map에선 현재 기능에 필요없는 다양한 메서드들이 같이 있기 때문에
-        - 현재 기능에 맞춰진 DTO를 따로 생성하는 것이 더 합리적이라 판단
-        - 확장성에 대해선 의문이 있음
-        - (매 기능마다 DTO를 분리하면 비슷한 기능을 하는 클래스들이 너무 많이 생김)
-        - (-> 상속등을 통해서 보완 가능 할수도..?)
-
-        3. DTO를 어떻게 분리해야할까?
-        - domain 의 클래스와 동일하게 생각하기엔
-        - 현재 서비스 단에서는 ResourceGroup Enum 을 사용하고 있기 때문에
-        - 아울러 ResourceDTO 를 분리 해도 이는 정확히 Resource Entity Class 의 DT 기능만을 하는 객체라고 보기 어려움
-        - 일단은, dto 본래 의미에 맞게 데이터 전달용도로만 사용하는 것으로..
-    */
+    /**
+     * 사용자 ID, 장치 Sequence를 통해
+     * 해당하는 장치 정보를 리스트 형태로 불러옵니다.
+     * 만약 Parameter(userId/ deviceSeq)에 빈 값이 있으면
+     * 해당 조건은 무시하고 조회합니다.
+     * @param param
+     * @return 장치 정보를 리스트로 반환
+     */
     ArrayList<DeviceStatusDTO> findDvcList(DeviceVO param);
 
-    Integer getDvcCntBydvcSeq(@Param("dvcSeq") Integer dvcSeq);
-
+    /**
+     * 해당하는 deviceSeq를 삭제합니다.
+     * 단 userId가 일치하지 않는, 즉 해당 사용자가 장치의 주인이 아니면
+     * 삭제되지 않습니다.
+     * @param userId
+     * @param dvcSeq
+     * @return 삭제 row 개수를 반환
+     */
     Integer deleteDvcByDvcSeq(@Param("userId") String userId, @Param("dvcSeq") Integer dvcSeq);
 }

@@ -53,17 +53,20 @@ public class HomeIoTService {
      * 장치 정보: {serviceTargetSeq, external, deviceSeq, modelTypeCode, modelId, deviceName, resource[group, code, value]}
      * @param userId
      * @param devSeq
-     * @return 해당하는 장치 정보(단건) 반환
+     * @return 해당하는 장치 정보(단건) 반환, 없다면 메시지 반환
      */
-    public DeviceStatusDTO readDeviceInfo(String userId, Integer devSeq) {
+    public Object readDeviceInfo(String userId, Integer devSeq) {
         ArrayList<DeviceStatusDTO> deviceStatusList = deviceMapper.findDvcList(new DeviceVO(userId, devSeq));
         /**
-         * 매퍼 클래스의 반환 값이 리스트 형태이기 때문에 get(0)를 통해서 반환합니다.
-         * 해당하는 값이 없을 경우 null을 반환하고,
-         * 이는 컨트롤러의 {@link com.ktspace.miniHomeIoT.controller.HomeIoTController#getResultCode(ResponseDTO) getResultCode}로
-         * 예외처리 됩니다.
+         * 매퍼 클래스의 반환 값이 리스트 형태이기 때문에 첫번째 인덱스 값을 반환합니다.
+         * 해당하는 값이 없을 경우 null을 반환합니다.
          */
+        if (deviceStatusList.isEmpty()){
+            return "해당하는 Device가 없거나 소유한 사용자가 아닙니다.";
+        }
+
         DeviceStatusDTO result = deviceStatusList.get(0);
+
         return result;
     }
 
