@@ -57,7 +57,7 @@ public class HomeIoTController {
         ResponseDTO responseDTO = new ResponseDTO();
         responseDTO.setData(homeIotService.getUserDevices(userId));
         responseDTO.setResultCode(getResultCode(responseDTO));
-        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
+        return ResponseEntity.ok(responseDTO);
     }
 
     /**
@@ -74,7 +74,7 @@ public class HomeIoTController {
         ResponseDTO responseDTO = new ResponseDTO();
         responseDTO.setData(homeIotService.readDeviceInfo(userId, dvcSeq));
         responseDTO.setResultCode(getResultCode(responseDTO));
-        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
+        return ResponseEntity.ok(responseDTO);
     }
 
     /**
@@ -93,7 +93,7 @@ public class HomeIoTController {
         responseDTO.setData(homeIotService.controlResource(userId, dvcSeq, resourceDTO.get("group"), resourceDTO.get("value")));
         responseDTO.setResultCode(getResultCode(responseDTO));
 
-        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
+        return ResponseEntity.ok(responseDTO);
     }
 
     /**
@@ -106,9 +106,9 @@ public class HomeIoTController {
     @RequestMapping(value = "/devices/{deviceSeq}", method = RequestMethod.DELETE)
     public ResponseEntity<?> deleteDevice(@RequestHeader("userId") String userId, @PathVariable(value = "deviceSeq") Integer devSeq) {
         // 장치 삭제
-        ResponseDTO responseDTO = new ResponseDTO();//알아서 날려주려나..?
+        ResponseDTO responseDTO = new ResponseDTO();
         responseDTO.setData(homeIotService.deleteDevice(userId, devSeq));
         responseDTO.setResultCode(getResultCode(responseDTO));
-        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
+        return ResponseEntity.ok(responseDTO);
     }
 }
