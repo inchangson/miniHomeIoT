@@ -1,6 +1,6 @@
-package com.ktspace.miniHomeIoT.dto;
+package com.ktspace.miniHomeIoT.dto.response;
 
-import lombok.Data;
+import com.ktspace.miniHomeIoT.dto.response.GeneralResponse;
 import lombok.Getter;
 import lombok.Setter;
 

@@ -11,7 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-public class DeviceStatusDTO {
+public class DeviceDTO {
     Integer serviceTargetSeq;
     String external;
     Integer deviceSeq;

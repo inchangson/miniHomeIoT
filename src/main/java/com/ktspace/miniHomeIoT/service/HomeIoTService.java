@@ -1,9 +1,7 @@
 package com.ktspace.miniHomeIoT.service;
 
-import com.ktspace.miniHomeIoT.dto.DeviceStatusDTO;
-import com.ktspace.miniHomeIoT.dto.ErrorResponse;
-import com.ktspace.miniHomeIoT.dto.GeneralResponse;
-import com.ktspace.miniHomeIoT.dto.ResponseDTO;
+import com.ktspace.miniHomeIoT.dto.DeviceDTO;
+import com.ktspace.miniHomeIoT.dto.response.ErrorResponse;
 import com.ktspace.miniHomeIoT.exception.InvalidUserException;
 import com.ktspace.miniHomeIoT.mapper.DeviceMapper;
 import com.ktspace.miniHomeIoT.mapper.ResourceMapper;
@@ -68,7 +66,7 @@ public class HomeIoTService {
      */
     @ExceptionHandler(InvalidUserException.class)
     public Object readDeviceInfo(String userId, Integer devSeq) {
-        ArrayList<DeviceStatusDTO> deviceStatusList = deviceMapper.findDvcList(new DeviceVO(userId, devSeq));
+        ArrayList<DeviceDTO> deviceStatusList = deviceMapper.findDvcList(new DeviceVO(userId, devSeq));
         /**
          * 매퍼 클래스의 반환 값이 리스트 형태이기 때문에 첫번째 인덱스 값을 반환합니다.
          * 해당하는 값이 없을 경우 null을 반환합니다.
@@ -77,7 +75,7 @@ public class HomeIoTService {
             return "해당하는 Device가 없거나 소유한 사용자가 아닙니다.";
         }
 
-        DeviceStatusDTO result = deviceStatusList.get(0);
+        DeviceDTO result = deviceStatusList.get(0);
 
         return result;
     }
@@ -92,7 +90,7 @@ public class HomeIoTService {
     public HashMap<String, Object> getUserDevices(String userId) {
         HashMap<String, Object> result = new HashMap<>();
 
-        ArrayList<DeviceStatusDTO> dvcStatusDTOList = deviceMapper.findDvcList(new DeviceVO(userId, null));
+        ArrayList<DeviceDTO> dvcStatusDTOList = deviceMapper.findDvcList(new DeviceVO(userId, null));
 
         result.put("deviceCount", dvcStatusDTOList.size());
         result.put("deviceList", dvcStatusDTOList);
