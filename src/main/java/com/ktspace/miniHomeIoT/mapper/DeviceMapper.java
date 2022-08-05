@@ -1,6 +1,6 @@
 package com.ktspace.miniHomeIoT.mapper;
 
-import com.ktspace.miniHomeIoT.dto.DeviceDTO;
+import com.ktspace.miniHomeIoT.dto.Device;
 import com.ktspace.miniHomeIoT.vo.DeviceVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -20,7 +20,7 @@ public interface DeviceMapper {
      * @param param
      * @return 장치 정보를 리스트로 반환
      */
-    ArrayList<DeviceDTO> findDvcList(DeviceVO param);
+    ArrayList<Device> findDvcList(@Param("userId") String userId, @Param("dvcSeq") Integer dvcSeq);
 
     /**
      * 해당하는 deviceSeq를 삭제합니다.

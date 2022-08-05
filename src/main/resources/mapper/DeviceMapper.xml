@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ktspace.miniHomeIoT.mapper.DeviceMapper">
-    <resultMap id="deviceResultMap" type="com.ktspace.miniHomeIoT.dto.DeviceDTO">
+    <resultMap id="deviceResultMap" type="com.ktspace.miniHomeIoT.dto.Device">
         <result column="serviceTargetSeq" property="serviceTargetSeq"/>
         <result column="external" property="external"/>
         <result column="deviceSeq" property="deviceSeq"/>
@@ -9,7 +9,7 @@
         <result column="modelId" property="modelId"/>
         <result column="deviceName" property="deviceName"/>
         <collection property="resource" javaType="ArrayList" column="deviceSeq"
-                    ofType="com.ktspace.miniHomeIoT.dto.ResourceDTO"
+                    ofType="com.ktspace.miniHomeIoT.dto.Resource"
             select ="selectRscForDvc">
             <result column="group" property="group"/>
             <result column="code" property="code"/>
@@ -36,7 +36,7 @@
           and device.dvc_seq = #{dvcSeq}
           </if>
     </select>
-    <select id="selectRscForDvc" resultType="com.ktspace.miniHomeIoT.dto.ResourceDTO">
+    <select id="selectRscForDvc" resultType="com.ktspace.miniHomeIoT.dto.Resource">
         select resource_type.rsc_type_group as "group",
                resource_type.rsc_type_code as "code",
                resource.rsc_value as "value"

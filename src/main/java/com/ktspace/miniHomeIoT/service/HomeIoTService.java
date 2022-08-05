@@ -1,17 +1,19 @@
 package com.ktspace.miniHomeIoT.service;
 
-import com.ktspace.miniHomeIoT.dto.DeviceDTO;
+import com.ktspace.miniHomeIoT.dto.Device;
 import com.ktspace.miniHomeIoT.dto.response.ErrorResponse;
+import com.ktspace.miniHomeIoT.dto.response.ListResponse;
+import com.ktspace.miniHomeIoT.dto.response.SingleResponse;
 import com.ktspace.miniHomeIoT.exception.InvalidUserException;
 import com.ktspace.miniHomeIoT.mapper.DeviceMapper;
 import com.ktspace.miniHomeIoT.mapper.ResourceMapper;
 import com.ktspace.miniHomeIoT.vo.DeviceVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -64,20 +66,13 @@ public class HomeIoTService {
      * @param devSeq
      * @return 해당하는 장치 정보(단건) 반환, 없다면 메시지 반환
      */
-    @ExceptionHandler(InvalidUserException.class)
-    public Object readDeviceInfo(String userId, Integer devSeq) {
-        ArrayList<DeviceDTO> deviceStatusList = deviceMapper.findDvcList(new DeviceVO(userId, devSeq));
-        /**
-         * 매퍼 클래스의 반환 값이 리스트 형태이기 때문에 첫번째 인덱스 값을 반환합니다.
-         * 해당하는 값이 없을 경우 null을 반환합니다.
-         */
-        if (deviceStatusList.isEmpty()){
-            return "해당하는 Device가 없거나 소유한 사용자가 아닙니다.";
-        }
+    public SingleResponse<Device> readDeviceInfo(String userId, Integer devSeq) {
+        SingleResponse<Device> singleResponse = new SingleResponse<>();
+        ArrayList<Device> deviceStatusList = deviceMapper.findDvcList(userId, devSeq);
 
-        DeviceDTO result = deviceStatusList.get(0);
+        Device result = deviceStatusList.get(0);
 
-        return result;
+        return singleResponse;
     }
 
     /**
@@ -87,10 +82,10 @@ public class HomeIoTService {
      * @param userId
      * @return 해당 사용자의 모든 장치에 대한 정보를 반환
      */
-    public HashMap<String, Object> getUserDevices(String userId) {
-        HashMap<String, Object> result = new HashMap<>();
+    public ListResponse<Device> getUserDevices(String userId) {
+        ListResponse<Device> result = new ListResponse<>();
 
-        ArrayList<DeviceDTO> dvcStatusDTOList = deviceMapper.findDvcList(new DeviceVO(userId, null));
+        ArrayList<Device> dvcStatusDTOList = deviceMapper.findDvcList(userId, null);
 
         result.put("deviceCount", dvcStatusDTOList.size());
         result.put("deviceList", dvcStatusDTOList);
@@ -106,7 +101,7 @@ public class HomeIoTService {
      * @param value
      * @return 성공 여부 반환
      */
-    public HashMap<String, Object> controlResource(String userId, Integer dvcSeq, String rscGroup, String value) {
+    public SingleResponse<?> controlResource(String userId, Integer dvcSeq, String rscGroup, String value) {
         HashMap<String, Object> result = new HashMap<String, Object>();
         /**
          * myBatis를 통해 쿼리문을 실행합니다.
@@ -139,7 +134,7 @@ public class HomeIoTService {
      * @param dvcSeq
      * @return 성공 여부를 반환합니다.
      */
-    public Map<String, Object> deleteDevice(String userId, Integer dvcSeq) {
+    public SingleResponse<?> deleteDevice(String userId, Integer dvcSeq) {
         Map<String, Object> result = new HashMap<>();
         Integer deletedRowCnt = deviceMapper.deleteDvcByDvcSeq(userId, dvcSeq);
         if (deletedRowCnt == 0){

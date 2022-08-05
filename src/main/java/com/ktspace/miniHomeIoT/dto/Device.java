@@ -11,12 +11,12 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-public class DeviceDTO {
+public class Device {
     Integer serviceTargetSeq;
     String external;
     Integer deviceSeq;
     String modelTypeCode;
     String modelId;
     String deviceName;
-    List<ResourceDTO> resource;
+    List<Resource> resource;
 }
