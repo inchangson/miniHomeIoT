@@ -6,5 +6,9 @@ import lombok.Getter;
 import java.util.List;
 @Getter
 public class ListResponse<T> extends GeneralResponse {
-    List<T> data;
+    ListData data;
+    class ListData{
+        int count;
+        List<T> list;
+    }
 }
