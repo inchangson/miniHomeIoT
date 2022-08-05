@@ -4,7 +4,6 @@ import com.ktspace.miniHomeIoT.dto.Device;
 import com.ktspace.miniHomeIoT.dto.response.ErrorResponse;
 import com.ktspace.miniHomeIoT.dto.response.ListResponse;
 import com.ktspace.miniHomeIoT.dto.response.SingleResponse;
-import com.ktspace.miniHomeIoT.enums.Result;
 import com.ktspace.miniHomeIoT.mapper.DeviceMapper;
 import com.ktspace.miniHomeIoT.mapper.ResourceMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +15,9 @@ import java.util.Map;
 
 /**
  * HomeIoT의 서비스 입니다.
- * @version 1.0
+ *
  * @author 손인창
+ * @version 1.0
  */
 @Service
 public class HomeIoTService {
@@ -29,9 +29,22 @@ public class HomeIoTService {
      * 리소스 관련 기능 쿼리와 연결되는 매퍼 클래스입니다.
      */
     ResourceMapper resourceMapper;
+    /**
+     * 장치 서비스 관련 상수들입니다.
+     */
+    final static String resultCode = "resultCode";
+    final static String resultMessage = "resultMessage";
+    final static String message = "message";
+
+    final static String RESPONSE_SUCCEED_CODE = "200";
+    final static String CONTROL_RESOURCE_SUCCEED = "제어 성공";
+    final static String CONTROL_RESOURCE_FAIL = "제어 실패";
+    final static String DELETE_RESOURCE_SUCCEED = "[deviceSeq : %d] 장치 삭제 성공";
+    final static String DELETE_RESOURCE_FAIL = "[deviceSeq : %d] 장치 삭제 실패";
 
     /**
      * 생성자주입 방식으로 매퍼 클래스를 불러옵니다.
+     *
      * @param deviceMapper
      * @param resourceMapper
      */
@@ -41,7 +54,7 @@ public class HomeIoTService {
         this.resourceMapper = resourceMapper;
     }
 
-    public ErrorResponse getErrorResponse(String code, String message){
+    public ErrorResponse getErrorResponse(String code, String message) {
         ErrorResponse errorResponse = new ErrorResponse();
         errorResponse.responseCode = code;
         errorResponse.errorReason = message;
@@ -53,6 +66,7 @@ public class HomeIoTService {
      * DB조회는 {@link DeviceMapper#findDvcList(DeviceVO) findDvcList} 참조
      * 장치 sequence 값을 통해 장치 정보를 조회합니다.
      * 장치 정보: {serviceTargetSeq, external, deviceSeq, modelTypeCode, modelId, deviceName, resource[group, code, value]}
+     *
      * @param userId
      * @param devSeq
      * @return 해당하는 장치 정보(단건) 반환, 없다면 메시지 반환
@@ -70,6 +84,7 @@ public class HomeIoTService {
      * 호출은 {@link com.ktspace.miniHomeIoT.controller.HomeIoTController#getUserDevices(String) getUserDevices} 참조
      * DB조회는 {@link DeviceMapper#findDvcList(DeviceVO) findDvcList} 참조
      * userId 에 해당하는 모든 장치 정보를 조회합니다.
+     *
      * @param userId
      * @return 해당 사용자의 모든 장치에 대한 정보를 반환
      */
@@ -81,8 +96,11 @@ public class HomeIoTService {
         return result;
     }
 
+
+
     /**
      * 요청된 장치 sequence 정보, 수정할 리소스 정보를 토대로 DB 정보를 수정합니다.
+     *
      * @param userId
      * @param dvcSeq
      * @param rscGroup
@@ -99,12 +117,12 @@ public class HomeIoTService {
          */
         Integer updatedRowCnt = resourceMapper.updateRscValueByDvcSeq(userId, dvcSeq, rscGroup, value);
 
-        if (updatedRowCnt == 0){
-            updateResult.put("resultCode", Result.CONTROL_RESOURCE_FAIL.getCode());
-            updateResult.put("resultMessage", Result.CONTROL_RESOURCE_FAIL.getMessage());
-        } else{
-            updateResult.put("resultCode",  Result.CONTROL_RESOURCE_SUCCEED.getCode());
-            updateResult.put("resultMessage",  Result.CONTROL_RESOURCE_SUCCEED.getCode());
+        if (updatedRowCnt == 0) {
+            updateResult.put(resultCode, CONTROL_RESOURCE_FAIL);
+            updateResult.put(resultMessage, CONTROL_RESOURCE_FAIL);
+        } else {
+            updateResult.put(resultCode, CONTROL_RESOURCE_SUCCEED);
+            updateResult.put(resultMessage, CONTROL_RESOURCE_SUCCEED);
             /**
              * 리소스 정보 수정 성공 시, 해당하는 리소스 로그도 남깁니다.
              */
@@ -118,6 +136,7 @@ public class HomeIoTService {
      * 요청된 장치 sequence, 사용자 정보를 통해
      * 해당 사용자가 소유한 장치라면
      * 해당 장치를 삭제합니다.
+     *
      * @param userId
      * @param dvcSeq
      * @return 성공 여부를 반환합니다.
@@ -126,10 +145,10 @@ public class HomeIoTService {
         SingleResponse<?> result = new SingleResponse<>();
         Map<String, Object> deleteResult = new HashMap<>();
         Integer deletedRowCnt = deviceMapper.deleteDvcByDvcSeq(userId, dvcSeq);
-        if (deletedRowCnt == 0){
-            deleteResult.put("message", String.format(Result.DELETE_RESOURCE_FAIL.getMessage(), dvcSeq));
-        }else{
-            deleteResult.put("message", String.format(Result.DELETE_RESOURCE_SUCCEED.getMessage(), dvcSeq));
+        if (deletedRowCnt == 0) {
+            deleteResult.put(message, String.format(DELETE_RESOURCE_FAIL, dvcSeq));
+        } else {
+            deleteResult.put(message, String.format(DELETE_RESOURCE_SUCCEED, dvcSeq));
         }
 
         return result;
