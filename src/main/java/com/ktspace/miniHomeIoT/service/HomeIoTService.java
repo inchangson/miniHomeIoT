@@ -1,12 +1,16 @@
 package com.ktspace.miniHomeIoT.service;
 
 import com.ktspace.miniHomeIoT.dto.DeviceStatusDTO;
+import com.ktspace.miniHomeIoT.dto.ErrorResponse;
+import com.ktspace.miniHomeIoT.dto.GeneralResponse;
 import com.ktspace.miniHomeIoT.dto.ResponseDTO;
+import com.ktspace.miniHomeIoT.exception.InvalidUserException;
 import com.ktspace.miniHomeIoT.mapper.DeviceMapper;
 import com.ktspace.miniHomeIoT.mapper.ResourceMapper;
 import com.ktspace.miniHomeIoT.vo.DeviceVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -46,6 +50,13 @@ public class HomeIoTService {
         this.resourceMapper = resourceMapper;
     }
 
+    public ErrorResponse getErrorResponse(String code, String message){
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.responseCode = code;
+        errorResponse.errorReason = message;
+        return errorResponse;
+    }
+
     /**
      * 호출은 {@link com.ktspace.miniHomeIoT.controller.HomeIoTController#readDeviceInfo(String, Integer)} 참조
      * DB조회는 {@link DeviceMapper#findDvcList(DeviceVO) findDvcList} 참조
@@ -55,6 +66,7 @@ public class HomeIoTService {
      * @param devSeq
      * @return 해당하는 장치 정보(단건) 반환, 없다면 메시지 반환
      */
+    @ExceptionHandler(InvalidUserException.class)
     public Object readDeviceInfo(String userId, Integer devSeq) {
         ArrayList<DeviceStatusDTO> deviceStatusList = deviceMapper.findDvcList(new DeviceVO(userId, devSeq));
         /**
