@@ -21,12 +21,6 @@ import java.util.HashMap;
          * 사용자 요청을 처리하는 서비스 객체입니다. {@link HomeIoTService HomeIoTService}
          */
         private final HomeIoTService homeIotService;
-        /**
-         * 요청에 따른 응답 코드들입니다.
-         */
-        private final String CODE_NA = "000";
-        private final String CODE_SUCCEED = "200";
-
         @Autowired
     public HomeIoTController(HomeIoTService homeIotService) {
 

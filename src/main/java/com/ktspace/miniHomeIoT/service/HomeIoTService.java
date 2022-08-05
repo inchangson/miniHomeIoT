@@ -4,7 +4,7 @@ import com.ktspace.miniHomeIoT.dto.Device;
 import com.ktspace.miniHomeIoT.dto.response.ErrorResponse;
 import com.ktspace.miniHomeIoT.dto.response.ListResponse;
 import com.ktspace.miniHomeIoT.dto.response.SingleResponse;
-import com.ktspace.miniHomeIoT.exception.InvalidUserException;
+import com.ktspace.miniHomeIoT.enums.Result;
 import com.ktspace.miniHomeIoT.mapper.DeviceMapper;
 import com.ktspace.miniHomeIoT.mapper.ResourceMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -30,13 +29,6 @@ public class HomeIoTService {
      * 리소스 관련 기능 쿼리와 연결되는 매퍼 클래스입니다.
      */
     ResourceMapper resourceMapper;
-    /**
-     * DB 접근에 따른 결과를 나타내는 코드와 메시지입니다.
-     */
-    final int    SUCCEED_CODE   = 200;
-    final int    FAIL_CODE      = 500;
-    final String SUCCEED_MSG    = "제어 성공";
-    final String FAIL_MSG       = "제어 실패";
 
     /**
      * 생성자주입 방식으로 매퍼 클래스를 불러옵니다.
@@ -108,11 +100,11 @@ public class HomeIoTService {
         Integer updatedRowCnt = resourceMapper.updateRscValueByDvcSeq(userId, dvcSeq, rscGroup, value);
 
         if (updatedRowCnt == 0){
-            updateResult.put("resultCode", FAIL_CODE);
-            updateResult.put("resultMessage", FAIL_MSG);
+            updateResult.put("resultCode", Result.CONTROL_RESOURCE_FAIL.getCode());
+            updateResult.put("resultMessage", Result.CONTROL_RESOURCE_FAIL.getMessage());
         } else{
-            updateResult.put("resultCode", SUCCEED_CODE);
-            updateResult.put("resultMessage", SUCCEED_MSG);
+            updateResult.put("resultCode",  Result.CONTROL_RESOURCE_SUCCEED.getCode());
+            updateResult.put("resultMessage",  Result.CONTROL_RESOURCE_SUCCEED.getCode());
             /**
              * 리소스 정보 수정 성공 시, 해당하는 리소스 로그도 남깁니다.
              */
@@ -135,9 +127,9 @@ public class HomeIoTService {
         Map<String, Object> deleteResult = new HashMap<>();
         Integer deletedRowCnt = deviceMapper.deleteDvcByDvcSeq(userId, dvcSeq);
         if (deletedRowCnt == 0){
-            deleteResult.put("message", String.format("[deviceSeq : %d] 장치 삭제 실패\n", dvcSeq));
+            deleteResult.put("message", String.format(Result.DELETE_RESOURCE_FAIL.getMessage(), dvcSeq));
         }else{
-            deleteResult.put("message", String.format("[deviceSeq : %d] 장치 삭제 성공\n", dvcSeq));
+            deleteResult.put("message", String.format(Result.DELETE_RESOURCE_SUCCEED.getMessage(), dvcSeq));
         }
 
         return result;
