@@ -1,4 +1,4 @@
-package com.ktspace.miniHomeIoT.exception;
+package com.ktspace.miniHomeIoT.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
