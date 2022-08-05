@@ -1,8 +1,10 @@
 package com.ktspace.miniHomeIoT.dto;
 
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
-public class ErrorResponse {
-    String reason;
+@Setter
+public class ErrorResponse extends GeneralResponse{
+    public String errorReason;
 }

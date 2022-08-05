@@ -9,4 +9,3 @@ public class ResponseDTO {
     private String resultCode;
     private Object data;
 }
-
