@@ -3,7 +3,6 @@ package com.ktspace.miniHomeIoT.service;
 import com.ktspace.miniHomeIoT.dto.Device;
 import com.ktspace.miniHomeIoT.dto.response.DeviceListResponse;
 import com.ktspace.miniHomeIoT.dto.response.ErrorResponse;
-import com.ktspace.miniHomeIoT.dto.response.ListResponse;
 import com.ktspace.miniHomeIoT.dto.response.SingleResponse;
 import com.ktspace.miniHomeIoT.mapper.DeviceMapper;
 import com.ktspace.miniHomeIoT.mapper.ResourceMapper;
@@ -76,11 +75,12 @@ public class HomeIoTService {
      * @return 해당하는 장치 정보(단건) 반환, 없다면 메시지 반환
      */
     public SingleResponse<Device> readDeviceInfo(String userId, Integer devSeq) {
-        SingleResponse<Device> singleResponse = new SingleResponse<>();
         ArrayList<Device> deviceStatusList = deviceMapper.findDvcList(userId, devSeq);
-
-        Device result = deviceStatusList.get(0);
-
+        Device device = deviceStatusList.get(0);
+        SingleResponse<Device> singleResponse = SingleResponse.<Device>builder()
+                .responseCode(RESPONSE_SUCCEED_CODE)
+                .data(device)
+                .build();
         return singleResponse;
     }
 
@@ -117,26 +117,26 @@ public class HomeIoTService {
      * @return 성공 여부 반환
      */
     public SingleResponse<?> controlResource(String userId, Integer dvcSeq, String rscGroup, String value) {
-        SingleResponse<?> result = new SingleResponse<>();
+        SingleResponse<?> result = SingleResponse.builder().build();
         HashMap<String, Object> updateResult = new HashMap<String, Object>();
         /**
          * myBatis를 통해 쿼리문을 실행합니다.
          * 또한 updeate된 row의 개수를 반환하기 때문에
          * 이를 통해 성공 여부를 판단합니다.
          */
-        Integer updatedRowCnt = resourceMapper.updateRscValueByDvcSeq(userId, dvcSeq, rscGroup, value);
-
-        if (updatedRowCnt == 0) {
-            updateResult.put(resultCode, CONTROL_RESOURCE_FAIL);
-            updateResult.put(resultMessage, CONTROL_RESOURCE_FAIL);
-        } else {
-            updateResult.put(resultCode, CONTROL_RESOURCE_SUCCEED);
-            updateResult.put(resultMessage, CONTROL_RESOURCE_SUCCEED);
-            /**
-             * 리소스 정보 수정 성공 시, 해당하는 리소스 로그도 남깁니다.
-             */
-            resourceMapper.insertRscLog(dvcSeq, rscGroup, value);
-        }
+//        Integer updatedRowCnt = resourceMapper.updateRscValueByDvcSeq(userId, dvcSeq, rscGroup, value);
+//
+//        if (updatedRowCnt == 0) {
+//            updateResult.put(resultCode, CONTROL_RESOURCE_FAIL);
+//            updateResult.put(resultMessage, CONTROL_RESOURCE_FAIL);
+//        } else {
+//            updateResult.put(resultCode, CONTROL_RESOURCE_SUCCEED);
+//            updateResult.put(resultMessage, CONTROL_RESOURCE_SUCCEED);
+//            /**
+//             * 리소스 정보 수정 성공 시, 해당하는 리소스 로그도 남깁니다.
+//             */
+//            resourceMapper.insertRscLog(dvcSeq, rscGroup, value);
+//        }
 
         return result;
     }
@@ -151,7 +151,7 @@ public class HomeIoTService {
      * @return 성공 여부를 반환합니다.
      */
     public SingleResponse<?> deleteDevice(String userId, Integer dvcSeq) {
-        SingleResponse<?> result = new SingleResponse<>();
+        SingleResponse<?> result = SingleResponse.builder().build();
         Map<String, Object> deleteResult = new HashMap<>();
         Integer deletedRowCnt = deviceMapper.deleteDvcByDvcSeq(userId, dvcSeq);
         if (deletedRowCnt == 0) {

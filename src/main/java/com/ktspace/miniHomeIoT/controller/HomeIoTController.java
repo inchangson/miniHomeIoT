@@ -2,11 +2,9 @@ package com.ktspace.miniHomeIoT.controller;
 
 import com.ktspace.miniHomeIoT.dto.Device;
 import com.ktspace.miniHomeIoT.dto.response.DeviceListResponse;
-import com.ktspace.miniHomeIoT.dto.response.ListResponse;
 import com.ktspace.miniHomeIoT.dto.response.SingleResponse;
 import com.ktspace.miniHomeIoT.service.HomeIoTService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
