@@ -2,15 +2,20 @@ package com.ktspace.miniHomeIoT.dto.response;
 
 import com.ktspace.miniHomeIoT.dto.Device;
 import com.ktspace.miniHomeIoT.dto.response.GeneralResponse;
+import lombok.Builder;
 import lombok.Getter;
 
 import java.util.List;
 
 @Getter
-public class DeviceListResponse extends GeneralResponse {
+@Builder
+public class DeviceListResponse {
+    String responseCode;
     ListData data;
 
-    class ListData {
+    @Builder
+    @Getter
+    public static class ListData {
         int deviceCount;
         List<Device> deviceList;
     }
