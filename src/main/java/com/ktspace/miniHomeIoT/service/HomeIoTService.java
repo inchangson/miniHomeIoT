@@ -1,11 +1,14 @@
 package com.ktspace.miniHomeIoT.service;
 
 import com.ktspace.miniHomeIoT.dto.Device;
+import com.ktspace.miniHomeIoT.dto.response.DeviceListResponse;
 import com.ktspace.miniHomeIoT.dto.response.ErrorResponse;
 import com.ktspace.miniHomeIoT.dto.response.ListResponse;
 import com.ktspace.miniHomeIoT.dto.response.SingleResponse;
 import com.ktspace.miniHomeIoT.mapper.DeviceMapper;
 import com.ktspace.miniHomeIoT.mapper.ResourceMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -42,6 +45,7 @@ public class HomeIoTService {
     final static String DELETE_RESOURCE_SUCCEED = "[deviceSeq : %d] 장치 삭제 성공";
     final static String DELETE_RESOURCE_FAIL = "[deviceSeq : %d] 장치 삭제 실패";
 
+    private final Logger logger = LoggerFactory.getLogger(this.getClass().getSimpleName());
     /**
      * 생성자주입 방식으로 매퍼 클래스를 불러옵니다.
      *
@@ -88,11 +92,16 @@ public class HomeIoTService {
      * @param userId
      * @return 해당 사용자의 모든 장치에 대한 정보를 반환
      */
-    public ListResponse<Device> getUserDevices(String userId) {
-        ListResponse<Device> result = new ListResponse<>();
-
+    public DeviceListResponse getUserDevices(String userId) {
         ArrayList<Device> dvcStatusDTOList = deviceMapper.findDvcList(userId, null);
 
+        DeviceListResponse result = DeviceListResponse.builder()
+                .data(DeviceListResponse.ListData.builder()
+                        .deviceCount(dvcStatusDTOList.size())
+                        .deviceList(dvcStatusDTOList)
+                        .build())
+                .responseCode(RESPONSE_SUCCEED_CODE)
+                .build();
         return result;
     }
 
