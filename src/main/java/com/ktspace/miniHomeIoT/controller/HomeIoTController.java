@@ -1,6 +1,7 @@
 package com.ktspace.miniHomeIoT.controller;
 
 import com.ktspace.miniHomeIoT.dto.Device;
+import com.ktspace.miniHomeIoT.dto.response.DeviceListResponse;
 import com.ktspace.miniHomeIoT.dto.response.ListResponse;
 import com.ktspace.miniHomeIoT.dto.response.SingleResponse;
 import com.ktspace.miniHomeIoT.service.HomeIoTService;
@@ -33,8 +34,8 @@ import java.util.HashMap;
      * @return 해당 아이디에 존재하는 모든 장치의 정보(리소스 포함)를 반환
      */
     @RequestMapping(value = "/devices", method = RequestMethod.GET)
-    public ListResponse<Device> getUserDevices(@RequestHeader("userId") String userId) {
-        ListResponse<Device> result = homeIotService.getUserDevices(userId);
+    public DeviceListResponse getUserDevices(@RequestHeader("userId") String userId) {
+        DeviceListResponse result = homeIotService.getUserDevices(userId);
         return result;
     }
 
