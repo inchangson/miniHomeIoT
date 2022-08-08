@@ -52,4 +52,15 @@
           and device.cust_id = #{userId}
     </delete>
 
+    <select id="getUserCount" resultType="int">
+        select count(customer.cust_id) as "userCount"
+        from customer
+        where customer.cust_id = #{userId}
+    </select>
+
+    <select id="getDeviceCount" resultType="int">
+        select count(device.dvc_seq) as "deviceCount"
+        from device
+        where device.dvc_seq = #{dvcSeq}
+    </select>
 </mapper>

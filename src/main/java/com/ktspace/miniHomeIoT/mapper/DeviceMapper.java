@@ -31,4 +31,7 @@ public interface DeviceMapper {
      * @return 삭제 row 개수를 반환
      */
     Integer deleteDvcByDvcSeq(@Param("userId") String userId, @Param("dvcSeq") Integer dvcSeq);
+
+    Integer getUserCount(@Param("userId") String userId);
+    Integer getDeviceCount(@Param("dvcSeq") Integer dvcSeq);
 }
