@@ -2,8 +2,8 @@ package com.ktspace.miniHomeIoT.service;
 
 import com.ktspace.miniHomeIoT.dto.Device;
 import com.ktspace.miniHomeIoT.dto.response.DeviceListResponse;
-import com.ktspace.miniHomeIoT.dto.response.ErrorResponse;
 import com.ktspace.miniHomeIoT.dto.response.SingleResponse;
+import com.ktspace.miniHomeIoT.exception.DataNotFoundException;
 import com.ktspace.miniHomeIoT.mapper.DeviceMapper;
 import com.ktspace.miniHomeIoT.mapper.ResourceMapper;
 import org.slf4j.Logger;
@@ -38,12 +38,14 @@ public class HomeIoTService {
     final static String MESSAGE = "message";
 
     final static String RESPONSE_SUCCEED_CODE = "200";
+    final static String RESPONSE_FAIL_CODE = "400";
     final static String CONTROL_RESOURCE_SUCCEED = "제어 성공";
     final static String CONTROL_RESOURCE_FAIL = "제어 실패";
     final static String DELETE_RESOURCE_SUCCEED = "[deviceSeq : %d] 장치 삭제 성공";
     final static String DELETE_RESOURCE_FAIL = "[deviceSeq : %d] 장치 삭제 실패";
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass().getSimpleName());
+
     /**
      * 생성자주입 방식으로 매퍼 클래스를 불러옵니다.
      *
@@ -56,31 +58,28 @@ public class HomeIoTService {
         this.resourceMapper = resourceMapper;
     }
 
-    public ErrorResponse getErrorResponse(String code, String message) {
-        ErrorResponse errorResponse = new ErrorResponse();
-        errorResponse.responseCode = code;
-        errorResponse.errorReason = message;
-        return errorResponse;
+    private void checkUserException(String userId) {
+        int result = deviceMapper.getUserCount(userId);
+        if (result == 0) {
+            throw new DataNotFoundException("해당 사용자가 없습니다.");
+        }
     }
 
-    /**
-     * 호출은 {@link com.ktspace.miniHomeIoT.controller.HomeIoTController#readDeviceInfo(String, Integer)} 참조
-     * DB조회는 {@link DeviceMapper#findDvcList(DeviceVO) findDvcList} 참조
-     * 장치 sequence 값을 통해 장치 정보를 조회합니다.
-     * 장치 정보: {serviceTargetSeq, external, deviceSeq, modelTypeCode, modelId, deviceName, resource[group, code, value]}
-     *
-     * @param userId
-     * @param devSeq
-     * @return 해당하는 장치 정보(단건) 반환, 없다면 메시지 반환
-     */
-    public SingleResponse<Device> readDeviceInfo(String userId, Integer devSeq) {
-        ArrayList<Device> deviceStatusList = deviceMapper.findDvcList(userId, devSeq);
-        Device device = deviceStatusList.get(0);
-        SingleResponse<Device> singleResponse = SingleResponse.<Device>builder()
-                .responseCode(RESPONSE_SUCCEED_CODE)
-                .data(device)
-                .build();
-        return singleResponse;
+    private void checkDeviceException(Integer deviceSeq) {
+        int result = deviceMapper.getDeviceCount(deviceSeq);
+
+        if (result == 0) {
+            throw new DataNotFoundException("해당 기기가 없습니다.");
+        }
+    }
+
+    private void checkUserDeviceException(String userId, Integer dvcSeq) {
+        if (userId != null) {
+            checkUserException(userId);
+        }
+        if (dvcSeq != null){
+            checkDeviceException(dvcSeq);
+        }
     }
 
     /**
@@ -92,7 +91,14 @@ public class HomeIoTService {
      * @return 해당 사용자의 모든 장치에 대한 정보를 반환
      */
     public DeviceListResponse getUserDevices(String userId) {
+        if(userId == ""){
+            throw new NullPointerException("no data on userId");
+        }
         ArrayList<Device> dvcStatusDTOList = deviceMapper.findDvcList(userId, null);
+
+        if (dvcStatusDTOList.size() <= 0) {
+            checkUserDeviceException(userId, null);
+        }
 
         DeviceListResponse result = DeviceListResponse.builder()
                 .data(DeviceListResponse.ListData.builder()
@@ -105,6 +111,44 @@ public class HomeIoTService {
     }
 
     /**
+     * 호출은 {@link com.ktspace.miniHomeIoT.controller.HomeIoTController#readDeviceInfo(String, Integer)} 참조
+     * DB조회는 {@link DeviceMapper#findDvcList(DeviceVO) findDvcList} 참조
+     * 장치 sequence 값을 통해 장치 정보를 조회합니다.
+     * 장치 정보: {serviceTargetSeq, external, deviceSeq, modelTypeCode, modelId, deviceName, resource[group, code, value]}
+     *
+     * @param userId
+     * @param dvcSeq
+     * @return 해당하는 장치 정보(단건) 반환, 없다면 메시지 반환
+     */
+    public SingleResponse<Device> readDeviceInfo(String userId, Integer dvcSeq) {
+        if(userId == ""){
+            throw new NullPointerException("no data on userId");
+        }
+        ArrayList<Device> deviceStatusList = deviceMapper.findDvcList(userId, dvcSeq);
+
+        if(deviceStatusList.size() <= 0){
+            checkUserDeviceException(userId, dvcSeq);
+        }
+
+        Device device = deviceStatusList.get(0);
+        SingleResponse<Device> singleResponse = SingleResponse.<Device>builder()
+                .responseCode(RESPONSE_SUCCEED_CODE)
+                .data(device)
+                .build();
+
+        return singleResponse;
+    }
+
+    private HashMap<String, String> getControlResultMessage(String code, String message) {
+        HashMap<String, String> result = new HashMap<>();
+
+        result.put(RESULT_CODE, code);
+        result.put(RESULT_MESSAGE, message);
+
+        return result;
+    }
+
+    /**
      * 요청된 장치 sequence 정보, 수정할 리소스 정보를 토대로 DB 정보를 수정합니다.
      *
      * @param userId
@@ -113,8 +157,19 @@ public class HomeIoTService {
      * @param value
      * @return 성공 여부 반환
      */
-    public SingleResponse<HashMap<String, String>> controlResource(String userId, Integer dvcSeq, String rscGroup, String value) {
-        HashMap<String, String> updateResult = new HashMap<String, String>();
+    public SingleResponse<HashMap<String, String>> controlResource(String userId, Integer dvcSeq,
+                                                                   String rscGroup, String value) {
+        if(userId == ""){
+            throw new NullPointerException("no data on userId");
+        }
+        if(rscGroup == ""){
+            throw new NullPointerException("no data on rscGroup");
+        }
+        if(value == ""){
+            throw new NullPointerException("no data on value");
+        }
+
+
         /**
          * myBatis를 통해 쿼리문을 실행합니다.
          * 또한 updeate된 row의 개수를 반환하기 때문에
@@ -122,12 +177,12 @@ public class HomeIoTService {
          */
         Integer updatedRowCnt = resourceMapper.updateRscValueByDvcSeq(userId, dvcSeq, rscGroup, value);
 
+        HashMap<String, String> updateResult;
         if (updatedRowCnt == 0) {
-            updateResult.put(RESULT_CODE, CONTROL_RESOURCE_FAIL);
-            updateResult.put(RESULT_MESSAGE, CONTROL_RESOURCE_FAIL);
+            checkUserDeviceException(userId, dvcSeq);
+            updateResult = getControlResultMessage(RESPONSE_FAIL_CODE, CONTROL_RESOURCE_FAIL);
         } else {
-            updateResult.put(RESULT_CODE, CONTROL_RESOURCE_SUCCEED);
-            updateResult.put(RESULT_MESSAGE, CONTROL_RESOURCE_SUCCEED);
+            updateResult = getControlResultMessage(RESPONSE_SUCCEED_CODE, CONTROL_RESOURCE_SUCCEED);
             /**
              * 리소스 정보 수정 성공 시, 해당하는 리소스 로그도 남깁니다.
              */
@@ -153,9 +208,13 @@ public class HomeIoTService {
      * @return 성공 여부를 반환합니다.
      */
     public SingleResponse<HashMap<String, String>> deleteDevice(String userId, Integer dvcSeq) {
+        if(userId == ""){
+            throw new NullPointerException("no data on userId");
+        }
         HashMap<String, String> deleteResult = new HashMap<>();
         Integer deletedRowCnt = deviceMapper.deleteDvcByDvcSeq(userId, dvcSeq);
         if (deletedRowCnt == 0) {
+            checkUserDeviceException(userId, dvcSeq);
             deleteResult.put(MESSAGE, String.format(DELETE_RESOURCE_FAIL, dvcSeq));
         } else {
             deleteResult.put(MESSAGE, String.format(DELETE_RESOURCE_SUCCEED, dvcSeq));

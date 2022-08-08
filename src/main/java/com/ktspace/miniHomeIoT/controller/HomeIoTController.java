@@ -46,7 +46,8 @@ import java.util.HashMap;
      * @return 특정 deviceSequence에 해당하는 장치의 정보(리소스 포함)를 반환
      */
     @RequestMapping(value = "/devices/{deviceSeq}", method = RequestMethod.GET)
-    public SingleResponse<Device> readDeviceInfo(@RequestHeader("userId") String userId, @PathVariable(value = "deviceSeq") Integer dvcSeq) {
+    public SingleResponse<Device> readDeviceInfo(@RequestHeader("userId") String userId,
+                                                 @PathVariable(value = "deviceSeq") Integer dvcSeq) {
         SingleResponse<Device> result = homeIotService.readDeviceInfo(userId, dvcSeq);
         return result;
     }
@@ -60,10 +61,13 @@ import java.util.HashMap;
      * @return 값 수정 성공 여부를 반환합니다.
      */
     @RequestMapping(value = "/devices/{deviceSeq}", method = RequestMethod.PUT)
-    public SingleResponse<HashMap<String, String>> controlResource(@RequestHeader("userId") String userId, @PathVariable(value = "deviceSeq") Integer dvcSeq, @RequestBody HashMap<String, Object> map) {
+    public SingleResponse<HashMap<String, String>> controlResource(@RequestHeader("userId") String userId,
+                                                                   @PathVariable(value = "deviceSeq") Integer dvcSeq,
+                                                                   @RequestBody HashMap<String, Object> map) {
         //장치 리소스 수정
         HashMap<String, String> resourceDTO = (HashMap<String, String>) map.get("resource");
-        SingleResponse<HashMap<String, String>> result = homeIotService.controlResource(userId, dvcSeq, resourceDTO.get("group"), resourceDTO.get("value"));
+        SingleResponse<HashMap<String, String>> result;
+        result= homeIotService.controlResource(userId, dvcSeq, resourceDTO.get("group"), resourceDTO.get("value"));
         return result;
     }
 
@@ -75,8 +79,9 @@ import java.util.HashMap;
      * @return 장치 삭제 성공 여부를 반환합니다.
      */
     @RequestMapping(value = "/devices/{deviceSeq}", method = RequestMethod.DELETE)
-    public SingleResponse<?> deleteDevice(@RequestHeader("userId") String userId, @PathVariable(value = "deviceSeq") Integer devSeq) {
-        SingleResponse<?> result = homeIotService.deleteDevice(userId, devSeq);
+    public SingleResponse<HashMap<String, String>> deleteDevice(@RequestHeader("userId") String userId,
+                                          @PathVariable(value = "deviceSeq") Integer devSeq) {
+        SingleResponse<HashMap<String, String>> result = homeIotService.deleteDevice(userId, devSeq);
         return result;
     }
 }
