@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * HomeIoT의 서비스 입니다.
@@ -34,9 +33,9 @@ public class HomeIoTService {
     /**
      * 장치 서비스 관련 상수들입니다.
      */
-    final static String resultCode = "resultCode";
-    final static String resultMessage = "resultMessage";
-    final static String message = "message";
+    final static String RESULT_CODE = "resultCode";
+    final static String RESULT_MESSAGE = "resultMessage";
+    final static String MESSAGE = "message";
 
     final static String RESPONSE_SUCCEED_CODE = "200";
     final static String CONTROL_RESOURCE_SUCCEED = "제어 성공";
@@ -105,8 +104,6 @@ public class HomeIoTService {
         return result;
     }
 
-
-
     /**
      * 요청된 장치 sequence 정보, 수정할 리소스 정보를 토대로 DB 정보를 수정합니다.
      *
@@ -116,27 +113,32 @@ public class HomeIoTService {
      * @param value
      * @return 성공 여부 반환
      */
-    public SingleResponse<?> controlResource(String userId, Integer dvcSeq, String rscGroup, String value) {
-        SingleResponse<?> result = SingleResponse.builder().build();
-        HashMap<String, Object> updateResult = new HashMap<String, Object>();
+    public SingleResponse<HashMap<String, String>> controlResource(String userId, Integer dvcSeq, String rscGroup, String value) {
+        HashMap<String, String> updateResult = new HashMap<String, String>();
         /**
          * myBatis를 통해 쿼리문을 실행합니다.
          * 또한 updeate된 row의 개수를 반환하기 때문에
          * 이를 통해 성공 여부를 판단합니다.
          */
-//        Integer updatedRowCnt = resourceMapper.updateRscValueByDvcSeq(userId, dvcSeq, rscGroup, value);
-//
-//        if (updatedRowCnt == 0) {
-//            updateResult.put(resultCode, CONTROL_RESOURCE_FAIL);
-//            updateResult.put(resultMessage, CONTROL_RESOURCE_FAIL);
-//        } else {
-//            updateResult.put(resultCode, CONTROL_RESOURCE_SUCCEED);
-//            updateResult.put(resultMessage, CONTROL_RESOURCE_SUCCEED);
-//            /**
-//             * 리소스 정보 수정 성공 시, 해당하는 리소스 로그도 남깁니다.
-//             */
-//            resourceMapper.insertRscLog(dvcSeq, rscGroup, value);
-//        }
+        Integer updatedRowCnt = resourceMapper.updateRscValueByDvcSeq(userId, dvcSeq, rscGroup, value);
+
+        if (updatedRowCnt == 0) {
+            updateResult.put(RESULT_CODE, CONTROL_RESOURCE_FAIL);
+            updateResult.put(RESULT_MESSAGE, CONTROL_RESOURCE_FAIL);
+        } else {
+            updateResult.put(RESULT_CODE, CONTROL_RESOURCE_SUCCEED);
+            updateResult.put(RESULT_MESSAGE, CONTROL_RESOURCE_SUCCEED);
+            /**
+             * 리소스 정보 수정 성공 시, 해당하는 리소스 로그도 남깁니다.
+             */
+            resourceMapper.insertRscLog(dvcSeq, rscGroup, value);
+        }
+
+        SingleResponse<HashMap<String, String>> result;
+        result = SingleResponse.<HashMap<String, String>>builder()
+                .responseCode(RESPONSE_SUCCEED_CODE)
+                .data(updateResult)
+                .build();
 
         return result;
     }
@@ -150,15 +152,20 @@ public class HomeIoTService {
      * @param dvcSeq
      * @return 성공 여부를 반환합니다.
      */
-    public SingleResponse<?> deleteDevice(String userId, Integer dvcSeq) {
-        SingleResponse<?> result = SingleResponse.builder().build();
-        Map<String, Object> deleteResult = new HashMap<>();
+    public SingleResponse<HashMap<String, String>> deleteDevice(String userId, Integer dvcSeq) {
+        HashMap<String, String> deleteResult = new HashMap<>();
         Integer deletedRowCnt = deviceMapper.deleteDvcByDvcSeq(userId, dvcSeq);
         if (deletedRowCnt == 0) {
-            deleteResult.put(message, String.format(DELETE_RESOURCE_FAIL, dvcSeq));
+            deleteResult.put(MESSAGE, String.format(DELETE_RESOURCE_FAIL, dvcSeq));
         } else {
-            deleteResult.put(message, String.format(DELETE_RESOURCE_SUCCEED, dvcSeq));
+            deleteResult.put(MESSAGE, String.format(DELETE_RESOURCE_SUCCEED, dvcSeq));
         }
+
+        SingleResponse<HashMap<String, String>> result;
+        result = SingleResponse.<HashMap<String, String>>builder()
+                .responseCode(RESPONSE_SUCCEED_CODE)
+                .data(deleteResult)
+                .build();
 
         return result;
     }

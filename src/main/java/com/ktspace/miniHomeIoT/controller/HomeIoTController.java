@@ -60,10 +60,10 @@ import java.util.HashMap;
      * @return 값 수정 성공 여부를 반환합니다.
      */
     @RequestMapping(value = "/devices/{deviceSeq}", method = RequestMethod.PUT)
-    public SingleResponse<?> controlResource(@RequestHeader("userId") String userId, @PathVariable(value = "deviceSeq") Integer dvcSeq, @RequestBody HashMap<String, Object> map) {
+    public SingleResponse<HashMap<String, String>> controlResource(@RequestHeader("userId") String userId, @PathVariable(value = "deviceSeq") Integer dvcSeq, @RequestBody HashMap<String, Object> map) {
         //장치 리소스 수정
         HashMap<String, String> resourceDTO = (HashMap<String, String>) map.get("resource");
-        SingleResponse<?> result = homeIotService.controlResource(userId, dvcSeq, resourceDTO.get("group"), resourceDTO.get("value"));
+        SingleResponse<HashMap<String, String>> result = homeIotService.controlResource(userId, dvcSeq, resourceDTO.get("group"), resourceDTO.get("value"));
         return result;
     }
 
