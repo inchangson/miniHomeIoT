@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <configuration>
-    <property scope="context" name="LOG_DIR" value="/Users/son-inchang/Study/miniHomeIoT/log"/>
+    <property scope="context" name="LOG_DIR" value="./log"/>
     <appender name="Console" class="ch.qos.logback.core.ConsoleAppender">
         <!-- encoders are assigned the type
              ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
