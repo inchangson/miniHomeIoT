@@ -43,6 +43,7 @@ public class HomeIoTService {
     final static String CONTROL_RESOURCE_FAIL = "제어 실패";
     final static String DELETE_RESOURCE_SUCCEED = "[deviceSeq : %d] 장치 삭제 성공";
     final static String DELETE_RESOURCE_FAIL = "[deviceSeq : %d] 장치 삭제 실패";
+    final static String NONE_STRING = "";
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass().getSimpleName());
 
@@ -80,6 +81,7 @@ public class HomeIoTService {
         if (dvcSeq != null){
             checkDeviceException(dvcSeq);
         }
+        throw new DataNotFoundException("입력 조건이 올바르지 않습니다.");
     }
 
     /**
@@ -91,7 +93,7 @@ public class HomeIoTService {
      * @return 해당 사용자의 모든 장치에 대한 정보를 반환
      */
     public DeviceListResponse getUserDevices(String userId) {
-        if(userId == ""){
+        if(userId == NONE_STRING){
             throw new NullPointerException("no data on userId");
         }
         ArrayList<Device> dvcStatusDTOList = deviceMapper.findDvcList(userId, null);
@@ -121,7 +123,7 @@ public class HomeIoTService {
      * @return 해당하는 장치 정보(단건) 반환, 없다면 메시지 반환
      */
     public SingleResponse<Device> readDeviceInfo(String userId, Integer dvcSeq) {
-        if(userId == ""){
+        if(userId == NONE_STRING){
             throw new NullPointerException("no data on userId");
         }
         ArrayList<Device> deviceStatusList = deviceMapper.findDvcList(userId, dvcSeq);
@@ -159,13 +161,13 @@ public class HomeIoTService {
      */
     public SingleResponse<HashMap<String, String>> controlResource(String userId, Integer dvcSeq,
                                                                    String rscGroup, String value) {
-        if(userId == ""){
+        if(userId == NONE_STRING){
             throw new NullPointerException("no data on userId");
         }
-        if(rscGroup == ""){
+        if(rscGroup == NONE_STRING){
             throw new NullPointerException("no data on rscGroup");
         }
-        if(value == ""){
+        if(value == NONE_STRING){
             throw new NullPointerException("no data on value");
         }
 
@@ -208,7 +210,7 @@ public class HomeIoTService {
      * @return 성공 여부를 반환합니다.
      */
     public SingleResponse<HashMap<String, String>> deleteDevice(String userId, Integer dvcSeq) {
-        if(userId == ""){
+        if(userId == NONE_STRING){
             throw new NullPointerException("no data on userId");
         }
         HashMap<String, String> deleteResult = new HashMap<>();
