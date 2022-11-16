@@ -60,7 +60,7 @@ import java.util.HashMap;
      * @param map
      * @return 값 수정 성공 여부를 반환합니다.
      */
-    @RequestMapping(value = "/devices/{deviceSeq}", method = RequestMethod.PUT)
+    @RequestMapping(value = "/devices/{deviceSeq}", method = RequestMethod.PATCH)
     public SingleResponse<HashMap<String, String>> controlResource(@RequestHeader("userId") String userId,
                                                                    @PathVariable(value = "deviceSeq") Integer dvcSeq,
                                                                    @RequestBody HashMap<String, Object> map) {

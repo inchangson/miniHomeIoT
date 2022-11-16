@@ -9,17 +9,11 @@ import com.ktspace.miniHomeIoT.mapper.ResourceMapper;
 import com.ktspace.miniHomeIoT.service.HomeIoTService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
-import org.mybatis.spring.boot.test.autoconfigure.AutoConfigureMybatis;
-import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.transaction.annotation.Transactional;
-
-import org.assertj.core.api.Assertions.*;
-import org.junit.jupiter.api.Assertions.*;
+//import org.junit.runner.RunWith;
+//import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
+//import org.springframework.beans.factory.annotation.Autowired;
+//import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+//import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,23 +23,23 @@ import static org.assertj.core.api.Assertions.assertThat;
 //@SpringBootTest
 //@Transactional
 //@AutoConfigureMybatis
-@MybatisTest
+//@MybatisTest
 //@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@RunWith(SpringRunner.class)
+//@RunWith(SpringRunner.class)
 public class HomeIoTServiceTest {
-    @Autowired
-    DeviceMapper deviceMapper;
-    @Autowired
-    ResourceMapper resourceMapper;
+//    @Autowired
+//    DeviceMapper deviceMapper;
+//    @Autowired
+//    ResourceMapper resourceMapper;
 
     HomeIoTService homeIoTService;
 
     private static final String RESPONSE_SUCCEED_CODE = "200";
-    private ObjectMapper mapper = new ObjectMapper();
+    private final ObjectMapper mapper = new ObjectMapper();
 
     @BeforeEach
     void init(){
-        homeIoTService = new HomeIoTService(deviceMapper, resourceMapper);
+//        homeIoTService = new HomeIoTService(deviceMapper, resourceMapper);
     }
 
     private Resource getResource(String group, String code, String value){
